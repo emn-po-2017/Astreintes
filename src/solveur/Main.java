@@ -1,7 +1,9 @@
 package solveur;
 
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.objective.ParetoOptimizer;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -179,16 +181,17 @@ public class Main {
 			model.sum(med[m], "=", nbAstreintesParMedecin[m]).post();
 		}
 		// Asi moyen
-		IntVar nbAstreintesMoyen = model.intVar("Moyenne", 0, 999);
+		IntVar nbAstreintesMoyen = model.intVar("somme", 0, 999);
 		model.sum(nbAstreintesParMedecin, "=", nbAstreintesMoyen).post();
 		//model.arithm(nbAstreintesMoyen, "/", medecins);
-		//IntVar nbAstreintesMoyen2 = model.intScaleView(nbAstreintesMoyen, 1/medecins);
-		System.out.println(nbAstreintesMoyen);
+		IntVar nbAstreintesMoyen2 = model.intVar("moyenne", 0, 999); 
+		model.scalar(new IntVar[] {nbAstreintesMoyen} , new int[] {1/medecins} ,"=", nbAstreintesMoyen2);
+		//System.out.println(nbAstreintesMoyen);
 		//System.out.println(nbAstreintesMoyen2);
 		// Asi - As
 		IntVar[] DiffAstreintesParMedecin = model.intVarArray(medecins, 0, 999);
 		for (int m = 0; m < medecins; m++) {
-			model.arithm(nbAstreintesParMedecin[m], "-", nbAstreintesMoyen, "=", DiffAstreintesParMedecin[m]).post();
+			model.arithm(nbAstreintesParMedecin[m], "-", nbAstreintesMoyen2, "=", DiffAstreintesParMedecin[m]).post();
 		}
 		// sum
 		IntVar objectif = model.intVar("objectif", 0, 999);
@@ -205,7 +208,7 @@ public class Main {
 		Solver solver = model.getSolver();
 		while (solver.solve()) {
 			System.out.println(nbAstreintesMoyen);
-			//System.out.println(nbAstreintesMoyen2);
+			System.out.println(nbAstreintesMoyen2);
 			System.out.println(objectif);
 			System.out.println("1: " + nbAstreintesParMedecin[0].getValue() + "\n" + "2: "
 					+ nbAstreintesParMedecin[1].getValue() + "\n" + "3: " + nbAstreintesParMedecin[2].getValue() + "\n"
