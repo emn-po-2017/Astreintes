@@ -23,7 +23,8 @@ public class Main {
 		int nbAstreinteMin = 22;
 		int nbAstreinteSemaineMax = 19;
 		int nbAstreinteWeekendMax = 8;
-	    // Matrice congé : Congé = 1 ; Pas Congé = 0
+//##############################################################    
+		// Matrice congé : Congé = 1 ; Pas Congé = 0
 		// Sera lue depuis un fichier Excel
 		int[][] tabConge = new int[medecins][semaines*joursT];
 		for(int i = 0 ; i<medecins ; i++){
@@ -31,6 +32,8 @@ public class Main {
 				tabConge[i][j] = 0 ;
 			}
 		}
+//##############################################################    
+
 		// vacances d'hiver, 2 semaines 2 médecins
 		for(int j = 35; j<49; j++){
 			tabConge[0][j]=1; 
@@ -177,14 +180,14 @@ public class Main {
 		}
 		
 		/**
-		 * Résolution
+		 * RÃ©solution
 		 * 
 		 */
 		
 		Solver solver = model.getSolver();
 		
 		/**
-		 * Affichage des résultats
+		 * Affichage des rÃ©sultats
 		 * 
 		 */
 		if (solver.solve()) {
