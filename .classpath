@@ -7,5 +7,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/PO_astreinte/lib/apidocs-4.0.1.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jxl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
