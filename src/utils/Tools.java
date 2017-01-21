@@ -18,7 +18,7 @@ public class Tools {
 	public static int getWeekDay(int d) {
 		return (d==1) ? 6 : d-2; 
 	}
-	
+
 	/**
 	 * Retourne le nombre de jours d'un mois
 	 */
@@ -104,4 +104,12 @@ public class Tools {
     	if (week_day==6) {return 2;} //Month start with a Sunday -> 2
     	return week_day;
     }
+    
+    public static void main(String[] args) {
+		for (int i=0; i<12; i++) {
+			
+			int a = (i+6-1)%12;
+			System.out.println("départ :" + i + "  fin :" + a);
+		}
+	}
 }

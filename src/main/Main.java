@@ -1,10 +1,13 @@
 package main;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 
 import excel_entrée.Read_Informations;
 import excel_sortie.WriteOutput;
 import jxl.write.WriteException;
+import solveur.Solveur;
 
 public class Main {
 
@@ -19,16 +22,20 @@ public class Main {
         /*
          * Solver
          */
-//        boolean solution = false;
-//        System.out.println(solution);
-//        //Si on trouve une solution -> on affiche le calendrier
-//        //Sinon on affiche un calendrier "faux"
+        Solveur solveur = new Solveur(infos);
+        solveur.resoudre();
+        int[] resultats = solveur.getResultats();
+        //TODO
+        //Si on trouve une solution -> on affiche le calendrier
+        //Sinon on affiche un calendrier "faux"
         
         /*
          * Ecriture du fichier sortant
          */
         String output = chemin + "Sortie.xls";
-        WriteOutput excel_file = new WriteOutput(output, new int[0], infos);
+        WriteOutput excel_file = new WriteOutput(output, resultats, infos);
         excel_file.write();
+        Desktop dt = Desktop.getDesktop();
+        dt.open(new File(output));
 	}
 }

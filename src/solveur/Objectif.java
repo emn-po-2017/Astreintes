@@ -6,23 +6,24 @@ import org.chocosolver.solver.variables.IntVar;
 public class Objectif {
 	
 	Model model; 
+	Param param;
 
 	IntVar[] nbAstreintesParMedecin ;
 	IntVar nbAstreintesMoyen;;
 	IntVar obj2;
 
 	
-	public Objectif(Variables v, Model model) {
+	public Objectif(Variables v, Model model, Param param) {
 		
 		this.model= model;
 		
-		this.nbAstreintesParMedecin = model.intVarArray(Param.medecins, 0, 999);
+		this.nbAstreintesParMedecin = model.intVarArray(param.medecins, 0, 999);
 		this.nbAstreintesMoyen = model.intVar("somme", 0, 999);
 		this.obj2 = model.intVar("obj", 0, 9999);
 		
 		// Asi
 
-		for (int m = 0; m < Param.medecins; m++) {
+		for (int m = 0; m < param.medecins; m++) {
 			model.sum(v.getMed()[m], "=", nbAstreintesParMedecin[m]).post();
 		}
 		// Asi moyen
@@ -49,7 +50,7 @@ public class Objectif {
 		// nbAstreintesParMedecin);
 		// Solver solver = model.getSolver();
 		// solver.plugMonitor(po);
-		IntVar[] inter = model.intVarArray(Param.medecins, 0, 9999);
+		IntVar[] inter = model.intVarArray(param.medecins, 0, 9999);
 		for (int m = 0; m < inter.length; m++) {
 			model.square(inter[m], nbAstreintesParMedecin[m]).post();
 		}

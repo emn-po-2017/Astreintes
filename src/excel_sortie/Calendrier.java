@@ -25,8 +25,8 @@ public class Calendrier {
 	
 	private WritableSheet sheet; //Feuille excel
 	private Read_Informations infos; //Données en entrée
-	private int[] fake_doctors; //Tableau de résultats
-	private int total_days; //Nb de jours considérés
+	private int[] resultats; //Tableau de résultats
+	private int day_number; //Numéro du jour courant (de 0 à nbDeSemaines*7 - 1)
 	
 	private static int COL=0; //Curseur colonne
 	private static int LIN=0; //Curseur ligne
@@ -34,19 +34,8 @@ public class Calendrier {
 	public Calendrier(WritableSheet sheet, int[] resultat_solver, Read_Informations infos) {
 		this.sheet = sheet;
 		this.infos = infos;
-		this.total_days = infos.getNbSemaines() * 7;
-		this.fake_doctors = this.createFakeDoctors(7);
-	}
-	
-	/**
-	 * Créé un tableau avec des "faux" résultats pour tester le rendu visuel
-	 */
-	public int[] createFakeDoctors(int nb_doc) {
-		this.fake_doctors = new int[total_days];
-		for (int i=0; i<total_days; i++) {
-			fake_doctors[i] = (int)(Math.random()*nb_doc);
-		}
-		return fake_doctors;
+		this.resultats = resultat_solver;
+		this.day_number = 0;
 	}
 	
 	/**
@@ -100,12 +89,12 @@ public class Calendrier {
     	int day = 1;
     	COL = week_day;
     	
-    	int offset=0; //offset n'est utilisé que pour la représentation du premier mois
+    	int offset=0; //offset utilisé que pour la représentation du premier mois
     	if (month == infos.getStartMonth()) {
     		offset = Tools.getNumeroFirstLundi(infos.getStartYear(), infos.getStartMonth()) - 1;
     	}
     	
-    	while (day < nb_jours) {
+    	while (day <= nb_jours) {
     		while (COL<7 && day <= nb_jours) {
     			if (offset > 0) { //tant qu'on a un offset, aucun médecin n'est ajouté
     				sheet.addCell(new Number(COL, LIN, day));
@@ -113,8 +102,8 @@ public class Calendrier {
     			}
     			else {
     				sheet.addCell(new Number(COL, LIN, day));
-        			sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(fake_doctors[total_days-1]))); //ajout du doc
-        			total_days--;
+    				sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
+        			day_number++;
     			}
     			COL++;
     			day++;
@@ -125,17 +114,18 @@ public class Calendrier {
     	
     	//Pour le dernier mois, on termine la dernière semaine
     	//avec les jours du mois suivant
-    	if (month == infos.getHorizon()-1) {
+    	if (month == (infos.getHorizon()-1+infos.getStartMonth())%12) {
     		Calendar c = Calendar.getInstance();
         	c.set(year, month, Tools.getNumberOfDays(year, month), 0, 0, 0);
         	int w_d = Tools.getWeekDay(c.get(Calendar.DAY_OF_WEEK));
         	COL = w_d + 1;
         	LIN = LIN - 3;
+        	if (COL==7) { COL=0; }
         	int extra_day = 1;
         	while (COL<7) {
         		sheet.addCell(new Number(COL, LIN, extra_day));
-        		sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(fake_doctors[total_days-1]))); //ajout du doc
-        		total_days--;
+        		sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
+        		day_number++;
         		extra_day++;
         		COL++;
         	}
@@ -182,7 +172,7 @@ public class Calendrier {
 	  public void createLegend() throws RowsExceededException, WriteException {
 		  int col = 9;
 		  int lig = 3;
-		  int nb_doctors = 7;
+		  int nb_doctors = infos.getDoctors().size();
 		  for (int i=0; i<nb_doctors; i++) {
 			  sheet.addCell(new Label(col, lig+i, "medecin " + i));
 			  sheet.addCell(new Label(col+1, lig+i, "", getCellFormat(i)));
@@ -190,53 +180,20 @@ public class Calendrier {
 		  
 		  sheet.addCell(new Label(col+2, lig-1, "total"));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+2, lig + i, count_total(i, fake_doctors)));
+			  sheet.addCell(new Number(col+2, lig + i, this.count_total(i)));
 		  }
-		  
-		  sheet.addCell(new Label(col+3, lig - 1, "semaine"));
-		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+3, lig + i, count_semaine(i, fake_doctors)));
-		  }
-		  
-		  sheet.addCell(new Label(col+4, lig - 1, "week-end"));
-		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+4, lig + i, count_we(i, fake_doctors)));
-		  }
-		  
 	  }
 	  
 	  /**
 	   * Compte le nombre total d'astreintes pour un médecin
 	   */
-	  public static int count_total(int i, int[] tab) {
+	  public int count_total(int i) {
 		  int count = 0;
-		  for (int k=0; k<tab.length; k++) {
-			  if (tab[k] == i) {
+		  for (int k=0; k<resultats.length; k++) {
+			  if (resultats[k] == i) {
 				  count++;
 			  }
 		  }
 		  return count;
-	  }
-	  
-	  /**
-	   * Compte le nombre d'astreintes de week-end pour un médecin
-	   */
-	  public static int count_we(int i, int[] tab) {
-		  int count = 0;
-		  for (int k=0; k<tab.length; k++) {
-			  if (k%5==0 || k%6==0) {
-				  if (tab[k] == i) {
-					  count++;
-				  }
-			  }
-		  }
-		  return count;
-	  }
-	  
-	  /**
-	   * Compte le nombre d'astreintes en semaine un médecin
-	   */
-	  public static int count_semaine(int i, int[] tab) {
-		  return count_total(i, tab) - count_we(i, tab);
 	  }
 }
