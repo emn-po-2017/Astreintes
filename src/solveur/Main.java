@@ -1,6 +1,5 @@
 package solveur;
 
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.objective.ParetoOptimizer;
@@ -17,14 +16,14 @@ public class Main {
 		 */
 
 		Model model = new Model();
-		int semaines = 4 * 6;
+		int semaines = 5*6;
 		int joursS = 5;
 		int joursW = 2;
 		int joursT = 7;
 		int medecins = 7;
-		// int nbAstreinteMin = 22;
-		// int nbAstreinteSemaineMax = 19;
-		// int nbAstreinteWeekendMax = 8;
+		int nbAstreinteMin = (semaines*joursT/medecins)-3;
+		int nbAstreinteSemaineMax = (semaines*joursS/medecins)+2;
+		int nbAstreinteWeekendMax = (semaines*joursW/medecins)+2;;
 		// Matrice congé : Congé = 1 ; Pas Congé = 0
 		// Sera lue depuis un fichier Excel
 		int[][] tabConge = new int[medecins][semaines * joursT];
@@ -138,17 +137,21 @@ public class Main {
 			model.sum(medT[i], "=", 1).post();
 		}
 		// Astreintes min
-		/*
-		 * for (int i = 0; i < medecins; i++) { model.sum(med[i], ">",
-		 * nbAstreinteMin).post(); }
-		 */
 
-		/*
-		 * // même nombre semaine for (int i = 0; i < medecins; i++) {
-		 * model.sum(med5[i], "<", nbAstreinteSemaineMax).post(); } // même
-		 * nombre weekend for (int i = 0; i < medecins; i++) {
-		 * model.sum(med2[i], "<", nbAstreinteWeekendMax).post(); }
-		 */
+		for (int i = 0; i < medecins; i++) {
+			model.sum(med[i], ">", nbAstreinteMin).post();
+		}
+
+		// même nombre semaine
+		for (int i = 0; i < medecins; i++) {
+			model.sum(med5[i], "<", nbAstreinteSemaineMax).post();
+		} // même
+
+		// nombre weekend
+		for (int i = 0; i < medecins; i++) {
+			model.sum(med2[i], "<", nbAstreinteWeekendMax).post();
+		}
+
 		// Pas plus de 3 par semaine de 7 jours
 		for (int s = 0; s < semaines; s++) {
 			for (int m = 0; m < medecins; m++) {
@@ -183,24 +186,34 @@ public class Main {
 		// Asi moyen
 		IntVar nbAstreintesMoyen = model.intVar("somme", 0, 999);
 		model.sum(nbAstreintesParMedecin, "=", nbAstreintesMoyen).post();
-		//model.arithm(nbAstreintesMoyen, "/", medecins);
-		IntVar nbAstreintesMoyen2 = model.intVar("moyenne", 0, 999); 
-		model.scalar(new IntVar[] {nbAstreintesMoyen} , new int[] {1/medecins} ,"=", nbAstreintesMoyen2);
-		//System.out.println(nbAstreintesMoyen);
-		//System.out.println(nbAstreintesMoyen2);
-		// Asi - As
-		IntVar[] DiffAstreintesParMedecin = model.intVarArray(medecins, 0, 999);
-		for (int m = 0; m < medecins; m++) {
-			model.arithm(nbAstreintesParMedecin[m], "-", nbAstreintesMoyen2, "=", DiffAstreintesParMedecin[m]).post();
-		}
-		// sum
-		IntVar objectif = model.intVar("objectif", 0, 999);
-		model.sum(DiffAstreintesParMedecin, "=", objectif).post();
-		model.setObjective(Model.MINIMIZE, objectif);
-//		ParetoOptimizer po = new ParetoOptimizer(Model.MINIMIZE, nbAstreintesParMedecin);
-//		Solver solver = model.getSolver();
-//		solver.plugMonitor(po);
+		// model.arithm(nbAstreintesMoyen, "/", medecins);
+		/*
+		 * IntVar nbAstreintesMoyen2 = model.intVar("moyenne", 0, 999);
+		 * model.scalar(new IntVar[] {nbAstreintesMoyen} , new int[]
+		 * {1/medecins} ,"=", nbAstreintesMoyen2);
+		 * //System.out.println(nbAstreintesMoyen);
+		 * //System.out.println(nbAstreintesMoyen2); // Asi - As IntVar[]
+		 * DiffAstreintesParMedecin = model.intVarArray(medecins, 0, 999); for
+		 * (int m = 0; m < medecins; m++) {
+		 * model.arithm(nbAstreintesParMedecin[m], "-", nbAstreintesMoyen2, "=",
+		 * DiffAstreintesParMedecin[m]).post(); } // sum IntVar objectif =
+		 * model.intVar("objectif", 0, 999); model.sum(DiffAstreintesParMedecin,
+		 * "=", objectif).post(); model.setObjective(Model.MINIMIZE, objectif);
+		 */
 
+		// autre fonction objective
+
+		// ParetoOptimizer po = new ParetoOptimizer(Model.MINIMIZE,
+		// nbAstreintesParMedecin);
+		// Solver solver = model.getSolver();
+		// solver.plugMonitor(po);
+		IntVar[] inter = model.intVarArray(medecins, 0, 9999);
+		for (int m = 0; m < inter.length; m++) {
+			model.square(inter[m], nbAstreintesParMedecin[m]).post();
+		}
+		IntVar obj2 = model.intVar("obj", 0, 9999);
+		model.sum(inter, "=", obj2).post();
+		model.setObjective(Model.MINIMIZE, obj2);
 		/**
 		 * Résolution
 		 * 
@@ -208,8 +221,8 @@ public class Main {
 		Solver solver = model.getSolver();
 		while (solver.solve()) {
 			System.out.println(nbAstreintesMoyen);
-			System.out.println(nbAstreintesMoyen2);
-			System.out.println(objectif);
+			// System.out.println(nbAstreintesMoyen2);
+			System.out.println(obj2);
 			System.out.println("1: " + nbAstreintesParMedecin[0].getValue() + "\n" + "2: "
 					+ nbAstreintesParMedecin[1].getValue() + "\n" + "3: " + nbAstreintesParMedecin[2].getValue() + "\n"
 					+ "4: " + nbAstreintesParMedecin[3].getValue() + "\n" + "5: " + nbAstreintesParMedecin[4].getValue()
