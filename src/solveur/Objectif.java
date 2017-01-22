@@ -9,7 +9,7 @@ public class Objectif {
 	Param param;
 
 	IntVar[] nbAstreintesParMedecin ;
-	IntVar nbAstreintesMoyen;;
+	IntVar nbAstreintesMoyen;
 	IntVar obj2;
 
 	

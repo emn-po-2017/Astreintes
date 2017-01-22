@@ -20,13 +20,13 @@ public class Solveur {
 		this.variables = new Variables(this.model, this.param);
 	}
 	
-	public void resoudre() {
+	public int[] resoudre() {
 		new Contraintes(variables, model, param);
 		Objectif objectif = new Objectif(variables, model, param);
 		
 		Solver solver = this.model.getSolver();
 		solver.limitTime("1s");
-		
+		int[] resultats = new int[variables.getMed()[0].length];
 		while (solver.solve()) {
 		System.out.println(objectif.getObj2());
 		System.out.println("1: " + objectif.getNbAstreintesParMedecin()[0].getValue() + "\n" + "2: "
@@ -34,8 +34,43 @@ public class Solveur {
 				+ "4: " + objectif.getNbAstreintesParMedecin()[3].getValue() + "\n" + "5: " + objectif.getNbAstreintesParMedecin()[4].getValue()
 				+ "\n" + "6: " + objectif.getNbAstreintesParMedecin()[5].getValue() + "\n" + "7: "
 				+ objectif.getNbAstreintesParMedecin()[6].getValue() + "\n");
+		
+		int c =0;
+		for (int i=0; i<variables.getMed().length; i++) {
+			for (int j=0; j<variables.getMed()[i].length; j++) {
+				if (variables.getMed()[i][j].getValue() == 1) {
+					resultats[j] = i;
+					c++;
+				}
+			}
 		}
+		System.out.println(c);
 
+		//============ AFFICHAGE
+		int compteur = 0;
+		for (int m=0; m<variables.getMed().length; m++) {
+			for (int i=0; i<variables.getMed()[m].length; i++) {
+				if (variables.getMed()[m][i].getValue() == 1) {
+					compteur++;
+				}
+			}
+			System.out.println("medecin" + m + " : " + compteur);
+			compteur = 0;
+		}
+        System.out.println();
+		int compteur2 = 0;
+		for (int i=0; i<7; i++) {
+			for (int j=0; j<resultats.length; j++) {
+				if (resultats[j] == i) {
+					compteur2++;
+				}
+			}
+			System.out.println("medecin" + i + " : " + compteur2);
+			compteur2 = 0;
+		}
+		
+		}
+		return resultats;
 		/**
 		 * Affichage des résultats
 		 * 
