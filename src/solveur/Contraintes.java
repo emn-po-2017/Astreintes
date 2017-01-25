@@ -16,9 +16,8 @@ public class Contraintes {
 		for (int i = 0; i < Param.joursT * param.semaines; i++) {
 			model.sum(v.getMedT()[i], "=", 1).post();
 		}
-		// Astreintes min
 		
-
+		// Astreintes min
 		for (int i = 0; i < param.medecins; i++) {
 			model.sum(v.getMed()[i], ">", param.nbAstreinteMin).post();
 		}
@@ -51,14 +50,14 @@ public class Contraintes {
 				model.arithm(v.getMed()[m][j], "+", v.getMed()[m][j + 1], "<", 2).post();
 			}
 		}
-//		// Congé
-//		for (int i = 0; i < param.medecins; i++) {
-//			for (int j = 0; j < param.semaines * Param.joursT; j++) {
-//				if (param.tabConge[i][j] == 1) {
-//					// model.arithm(med[i][j], "!=", 1).post();
-//				}
-//			}
-//		}
+		// Congé
+		for (int i = 0; i < param.medecins; i++) {
+			for (int j = 0; j < param.semaines * Param.joursT; j++) {
+				if (param.tabConge[i][j] == 1) {
+					model.arithm(v.getMed()[i][j], "!=", 1).post();
+				}
+			}
+		}
 
 	}
 }
