@@ -178,9 +178,22 @@ public class Calendrier {
 			  sheet.addCell(new Label(col+1, lig+i, "", getCellFormat(i)));
 		  }
 		  
+		  //nombre d'astreintes totales
 		  sheet.addCell(new Label(col+2, lig-1, "total"));
 		  for (int i=0; i<nb_doctors; i++) {
 			  sheet.addCell(new Number(col+2, lig + i, this.count_total(i)));
+		  }
+		  
+		//nombre d'astreintes week-semaine
+		  sheet.addCell(new Label(col+3, lig-1, "semaine"));
+		  for (int i=0; i<nb_doctors; i++) {
+			  sheet.addCell(new Number(col+3, lig + i, this.count_semaine(i)));
+		  }
+		  
+		  //nombre d'astreintes week-end
+		  sheet.addCell(new Label(col+4, lig-1, "we"));
+		  for (int i=0; i<nb_doctors; i++) {
+			  sheet.addCell(new Number(col+4, lig + i, this.count_we(i)));
 		  }
 	  }
 	  
@@ -195,5 +208,27 @@ public class Calendrier {
 			  }
 		  }
 		  return count;
+	  }
+	  
+	  /**
+	   * Compte le nombre d'astreintes en week-end pour un médecin
+	   */
+	  public int count_we(int i) {
+		  int count = 0;
+		  int k = 5;
+		  while (k < infos.getNbSemaines() * 7) {
+			  if (resultats[k] == i || resultats[k+1] == i) {
+				  count++;
+			  }
+			  k+=7;
+		  }
+		  return count;
+	  }
+	  
+	  /**
+	   * Compte le nombre d'astreintes en semaine pour un médecin
+	   */
+	  public int count_semaine(int i) {
+		  return count_total(i) - count_we(i);
 	  }
 }
