@@ -1,5 +1,6 @@
 package solveur;
 
+import excel_entrée.Read_Conges;
 import excel_entrée.Read_Informations;
 
 public class Param {
@@ -14,18 +15,17 @@ public class Param {
 	public int nbAstreinteSemaineMax;
 	public int nbAstreinteWeekendMax;
 	
-	// Matrice congé : Congé = 1 ; Pas Congé = 0
-	// Sera lue depuis un fichier Excel
-	//public int[][] tabConge;
+	//Matrice des congés : Congé = 1 ; Pas Congé = 0
+	public int[][] tabConge;
 	
-	public Param(Read_Informations infos){
+	public Param(Read_Informations infos, Read_Conges conges){
 	
 		this.medecins = infos.getDoctors().size();
 		this.semaines = infos.getNbSemaines();
 		this.nbAstreinteMin = (semaines*joursT/medecins)-3;
 		this.nbAstreinteSemaineMax = (semaines*joursS/medecins)+2;
 		this.nbAstreinteWeekendMax = (semaines*joursW/medecins)+2;
-//		this.tabConge = new int[medecins][semaines * joursT];
+		this.tabConge = conges.getConges();
 //		
 //		for (int i = 0; i < medecins; i++) {
 //			for (int j = 0; j < semaines * joursT; j++) {

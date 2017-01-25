@@ -3,8 +3,8 @@ package solveur;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.variables.BoolVar;
 
+import excel_entrée.Read_Conges;
 import excel_entrée.Read_Informations;
 
 
@@ -14,9 +14,9 @@ public class Solveur {
 	private Param param;
 	private Variables variables;
 	
-	public Solveur(Read_Informations infos) {
+	public Solveur(Read_Informations infos, Read_Conges conges) {
 		this.model = new Model();
-		this.param = new Param(infos);
+		this.param = new Param(infos, conges);
 		this.variables = new Variables(this.model, this.param);
 	}
 	
@@ -46,6 +46,7 @@ public class Solveur {
 		}
 		System.out.println(c);
 
+		
 		//============ AFFICHAGE
 		int compteur = 0;
 		for (int m=0; m<variables.getMed().length; m++) {
@@ -67,10 +68,10 @@ public class Solveur {
 			}
 			System.out.println("medecin" + i + " : " + compteur2);
 			compteur2 = 0;
-		}
-		
+			}
 		}
 		return resultats;
+		
 		/**
 		 * Affichage des résultats
 		 * 
@@ -101,45 +102,5 @@ public class Solveur {
 		 * * semaines; i++) { nbAstreintes += med2[m][i].getValue(); }
 		 * System.out.print("\nM" + m + " : " + nbAstreintes); } }
 		 */
-	}
-	public int[] getResultats() {
-		//MAUVAISE ECRITURE DE RESULTATS
-		BoolVar[][] med = variables.getMed();
-		int[] resultats = new int[med[0].length];
-		int c =0;
-		for (int i=0; i<med.length; i++) {
-			for (int j=0; j<med[i].length; j++) {
-				if (med[i][j].getValue() == 1) {
-					resultats[j] = i;
-					c++;
-				}
-			}
-		}
-		System.out.println(c);
-
-		//============ AFFICHAGE
-		int compteur = 0;
-		for (int m=0; m<med.length; m++) {
-			for (int i=0; i<med[m].length; i++) {
-				if (med[m][i].getValue() == 1) {
-					compteur++;
-				}
-			}
-			System.out.println("medecin" + m + " : " + compteur);
-			compteur = 0;
-		}
-        System.out.println();
-		int compteur2 = 0;
-		for (int i=0; i<7; i++) {
-			for (int j=0; j<resultats.length; j++) {
-				if (resultats[j] == i) {
-					compteur2++;
-				}
-			}
-			System.out.println("medecin" + i + " : " + compteur2);
-			compteur2 = 0;
-		}
-		//===============
-		return resultats;
 	}
 }

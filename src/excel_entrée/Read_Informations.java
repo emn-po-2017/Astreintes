@@ -1,18 +1,12 @@
 package excel_entrée;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import jxl.Cell;
 import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
 import utils.Tools;
 
 public class Read_Informations {
-
-	private String path; //chemin d'accès au fichier Excel
 	
 	private int horizon; //nombre de mois à considérer
 	private int start_month; //mois de départ (numéroté de 0 à 11)
@@ -22,9 +16,27 @@ public class Read_Informations {
 			new ArrayList<String>(); //liste avec le nom des médecins
 
 	
-    public Read_Informations(String path) throws IOException {
-    	this.path = path;
-    	this.read();
+    public Read_Informations(Sheet sheet) {
+        //Lecture de l'horizon
+        Cell horizon = sheet.getCell(1, 1);
+        this.horizon = Integer.parseInt(horizon.getContents());
+        
+        //Lecture du mois de départ
+        Cell start_month = sheet.getCell(1,2);
+        this.start_month = Tools.getMonth(start_month.getContents());
+        
+        //Lecture de l'année de départ
+        Cell start_year = sheet.getCell(1,3);
+        this.start_year = Integer.parseInt(start_year.getContents());
+        
+        //Calcul du nombre de semaines
+        this.calculeNbSemaines();
+        
+        //Lecture des noms des docteurs
+        for (int l=6; l<sheet.getRows(); l++) {
+        	Cell d = sheet.getCell(0, l);
+        	this.doctors.add(d.getContents());
+        }
     }
     
     public int getHorizon() {
@@ -45,39 +57,6 @@ public class Read_Informations {
     
     public ArrayList<String> getDoctors() {
     	return this.doctors;
-    }
-
-    public void read() throws IOException  {
-        File inputWorkbook = new File(path);
-        Workbook w;
-        try {
-        	w = Workbook.getWorkbook(inputWorkbook);
-            Sheet sheet = w.getSheet(0); //Feuille excel "Informations"
-
-            //Lecture de l'horizon
-            Cell horizon = sheet.getCell(1, 1);
-            this.horizon = Integer.parseInt(horizon.getContents());
-            
-            //Lecture du mois de départ
-            Cell start_month = sheet.getCell(1,2);
-            this.start_month = Tools.getMonth(start_month.getContents());
-            
-            //Lecture de l'année de départ
-            Cell start_year = sheet.getCell(1,3);
-            this.start_year = Integer.parseInt(start_year.getContents());
-            
-            //Calcul du nombre de semaines
-            this.calculeNbSemaines();
-            
-            //Lecture des noms des docteurs
-            for (int l=6; l<sheet.getRows(); l++) {
-            	Cell d = sheet.getCell(0, l);
-            	this.doctors.add(d.getContents());
-            }
-        } 
-        catch (BiffException e) {
-                e.printStackTrace();
-        }
     }
     
     public void calculeNbSemaines() {

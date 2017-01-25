@@ -4,7 +4,10 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
+import excel_entrée.Read_Conges;
+import excel_entrée.Read_Excel;
 import excel_entrée.Read_Informations;
+import excel_entrée.Read_Preferences;
 import excel_sortie.WriteOutput;
 import jxl.write.WriteException;
 import solveur.Solveur;
@@ -15,16 +18,16 @@ public class Main {
 		/*
 		 * Lecture des données d'entrée
 		 */
-		//String chemin = "C:/Users/David/Documents/Mines de Nantes/A3S1/Projet Option/Excel/";
 		String input = "Saisie.xls";
-        Read_Informations infos = new Read_Informations(input);
+        Read_Excel excel = new Read_Excel(input);
+        Read_Informations infos = excel.getInformations();
+        Read_Preferences prefs = excel.getPreferences();
+        Read_Conges conges = excel.getConges();
         
         /*
          * Solver
          */
-        Solveur solveur = new Solveur(infos);
-        //solveur.resoudre();
-        //int[] resultats = solveur.getResultats();
+        Solveur solveur = new Solveur(infos, conges);
         int[] resultats = solveur.resoudre();
         
         //TODO
