@@ -174,7 +174,7 @@ public class Calendrier {
 		  int lig = 3;
 		  int nb_doctors = infos.getDoctors().size();
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Label(col, lig+i, "medecin " + i));
+			  sheet.addCell(new Label(col, lig+i, infos.getDoctors().get(i)));
 			  sheet.addCell(new Label(col+1, lig+i, "", getCellFormat(i)));
 		  }
 		  
