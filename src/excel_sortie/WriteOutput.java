@@ -36,6 +36,14 @@ public class WriteOutput {
         WritableSheet _calendrier = workbook.getSheet(0);
         Calendrier calendrier = new Calendrier(_calendrier, resultat_solver, infos);
         calendrier.createCalendar();
+        
+        //Ajout et écriture d'une feuille pour chaque médecin
+        for (int i=0; i<infos.getDoctors().size(); i++) {
+        	workbook.createSheet(infos.getDoctors().get(i), i+1);
+            WritableSheet _calendrier_medecin = workbook.getSheet(i+1);
+            Calendrier_Medecin calendrier_medecin = new Calendrier_Medecin(_calendrier_medecin, resultat_solver, infos, i);
+            calendrier_medecin.createCalendar();
+        }
 
         workbook.write();
         workbook.close();
