@@ -45,11 +45,11 @@ public class Contraintes {
 			}
 		}
 		// Pas 2 d'affilée
-		for (int m = 0; m < param.medecins; m++) {
-			for (int j = 0; j < param.semaines * Param.joursT - 1; j++) {
-				model.arithm(v.getMed()[m][j], "+", v.getMed()[m][j + 1], "<", 2).post();
-			}
-		}
+//		for (int m = 0; m < param.medecins; m++) {
+//			for (int j = 0; j < param.semaines * Param.joursT - 1; j++) {
+//				model.arithm(v.getMed()[m][j], "+", v.getMed()[m][j + 1], "<", 2).post();
+//			}
+//		}
 		// Congé
 		for (int i = 0; i < param.medecins; i++) {
 			for (int j = 0; j < param.semaines * Param.joursT; j++) {

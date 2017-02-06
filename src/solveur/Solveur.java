@@ -22,16 +22,15 @@ public class Solveur {
 	
 	public int[] resoudre() {
 		new Contraintes(variables, model, param);
-		Objectif objectif = new Objectif(variables, model, param, 3);
+		Objectif objectif = new Objectif(variables, model, param, 4);
 		
 		Solver solver = this.model.getSolver();
 		solver.limitTime("10s");
 		int[] resultats = new int[variables.getMed()[0].length];
 		while (solver.solve()) {
-			//System.out.println(objectif.getDiffAstreintesParMedecin());
-			System.out.println(objectif.getObj2());
-			System.out.println(objectif.getObj1());
-			System.out.println(objectif.getObj3());
+			System.out.println(objectif.getObj4());
+			System.out.println(objectif.getSommeCarree());
+			System.out.println(objectif.getSommeNonVoulues());
 		System.out.println("1: " + objectif.getNbAstreintesParMedecin()[0].getValue() + "\n" + "2: "
 				+ objectif.getNbAstreintesParMedecin()[1].getValue() + "\n" + "3: " + objectif.getNbAstreintesParMedecin()[2].getValue() + "\n"
 				+ "4: " + objectif.getNbAstreintesParMedecin()[3].getValue() + "\n" + "5: " + objectif.getNbAstreintesParMedecin()[4].getValue()
