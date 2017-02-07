@@ -10,7 +10,7 @@ public class Variables {
 	 */
 	Model model;
 	Param param;
-	
+
 	BoolVar[][] medT;
 	BoolVar[][] med;
 	BoolVar[][] med5;
@@ -18,12 +18,15 @@ public class Variables {
 	BoolVar[][][] parSemaine;
 	BoolVar[][][] parSemaine5;
 	BoolVar[][][] parWeekend;
+	BoolVar[][] medNonVoulu;
+
 	
+
 	public Variables(Model model, Param param) {
-		
+
 		this.param = param;
 		this.model = model;
-		
+
 		this.medT = model.boolVarMatrix(Param.joursT * param.semaines, param.medecins);
 		this.med = model.boolVarMatrix(param.medecins, Param.joursT * param.semaines);
 		this.med5 = model.boolVarMatrix(param.medecins, Param.joursS * param.semaines);
@@ -31,6 +34,7 @@ public class Variables {
 		this.parSemaine = new BoolVar[param.semaines][param.medecins][Param.joursT];
 		this.parSemaine5 = new BoolVar[param.semaines][param.medecins][Param.joursS];
 		this.parWeekend = new BoolVar[param.semaines][param.medecins][Param.joursW];
+		this.medNonVoulu= new BoolVar[param.medecins][param.semaines*Param.joursT];
 
 		// 2 tableaux identiques
 		for (int i = 0; i < Param.joursT * param.semaines; i++) {
@@ -39,7 +43,7 @@ public class Variables {
 			}
 		}
 		// tableau des jours de semaine
-		
+
 		for (int m = 0; m < param.medecins; m++) {
 			for (int s = 0; s < param.semaines; s++) {
 				for (int j = 0; j < Param.joursS; j++) {
@@ -48,7 +52,7 @@ public class Variables {
 			}
 		}
 		// tableau des jours de weekend
-		
+
 		for (int m = 0; m < param.medecins; m++) {
 			for (int s = 0; s < param.semaines; s++) {
 				for (int j = 0; j < Param.joursW; j++) {
@@ -58,7 +62,7 @@ public class Variables {
 			}
 		}
 		// 1 tableau/semaine
-		
+
 		for (int s = 0; s < param.semaines; s++) {
 			parSemaine[s] = model.boolVarMatrix(param.medecins, Param.joursT);
 		}
@@ -72,7 +76,7 @@ public class Variables {
 			}
 		}
 		// 1 tableau/semaine de 5
-		
+
 		for (int s = 0; s < param.semaines; s++) {
 			parSemaine5[s] = model.boolVarMatrix(param.medecins, Param.joursS);
 		}
@@ -86,7 +90,7 @@ public class Variables {
 			}
 		}
 		// 1 tableau/weekend
-		
+
 		for (int s = 0; s < param.semaines; s++) {
 			parWeekend[s] = model.boolVarMatrix(param.medecins, Param.joursW);
 		}
@@ -99,7 +103,19 @@ public class Variables {
 				}
 			}
 		}
+		// jours non voulus
+
+//		for (int m = 0; m < param.medecins; m++) {
+//			for (int j = 0; j < param.semaines * Param.joursT; j++) {
+//				//model.arithm(0, "=", medNonVoulu[m][j]).post();
+//				model.arithm(med[m][j], "=", medNonVoulu[m][j]).post();
+//				if (param.tabPref[m][j] == 0){
+//					model.arithm(med[m][j], "=", medNonVoulu[m][j]).post();
+//				}
+//			}
+//		}
 	}
+
 	public BoolVar[][] getMed() {
 		return med;
 	}
@@ -108,8 +124,6 @@ public class Variables {
 		this.med = med;
 	}
 
-	
-
 	public BoolVar[][] getMedT() {
 		return medT;
 	}
@@ -117,7 +131,7 @@ public class Variables {
 	public void setMedT(BoolVar[][] medT) {
 		this.medT = medT;
 	}
-	
+
 	public BoolVar[][] getMed5() {
 		return med5;
 	}
@@ -156,5 +170,8 @@ public class Variables {
 
 	public void setParWeekend(BoolVar[][][] parWeekend) {
 		this.parWeekend = parWeekend;
+	}
+	public BoolVar[][] getMedNonVoulu() {
+		return medNonVoulu;
 	}
 }

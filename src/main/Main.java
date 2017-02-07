@@ -24,12 +24,14 @@ public class Main {
         Read_Preferences prefs = excel.getPreferences();
         Read_Conges conges = excel.getConges();
         
+        Faisabilite f = new Faisabilite(new int[0][] , conges.getConges());
+       
         /*
          * Solver
          */
-        Solveur solveur = new Solveur(infos, conges);
-        int[] resultats = solveur.resoudre();
-        
+        if( f.faisable()){
+	        Solveur solveur = new Solveur(infos, conges);
+	        int[] resultats = solveur.resoudre();
         //TODO
         //Si on trouve une solution -> on affiche le calendrier
         //Sinon on affiche un calendrier "faux"
@@ -37,10 +39,14 @@ public class Main {
         /*
          * Ecriture du fichier sortant
          */
-        String output = "Sortie.xls";
-        WriteOutput excel_file = new WriteOutput(output, resultats, infos);
-        excel_file.write();
-        Desktop dt = Desktop.getDesktop();
-        dt.open(new File(output));
+	        String output = "Sortie.xls";
+	        WriteOutput excel_file = new WriteOutput(output, resultats, infos);
+	        excel_file.write();
+	        Desktop dt = Desktop.getDesktop();
+	        dt.open(new File(output));
+        }
+        else{
+        	System.out.println(f.provenence());
+        }
 	}
 }
