@@ -56,8 +56,7 @@ public class Variables {
 		for (int m = 0; m < param.medecins; m++) {
 			for (int s = 0; s < param.semaines; s++) {
 				for (int j = 0; j < Param.joursW; j++) {
-					model.arithm(med2[m][Param.joursW * s + j], "=", med[m][Param.joursT * s + j + Param.joursS])
-							.post();
+					model.arithm(med2[m][Param.joursW * s + j], "=", med[m][Param.joursT * s + j + Param.joursS]).post();
 				}
 			}
 		}
@@ -98,7 +97,7 @@ public class Variables {
 		for (int m = 0; m < param.medecins; m++) {
 			for (int s = 0; s < param.semaines; s++) {
 				for (int j = 0; j < Param.joursW; j++) {
-					model.arithm(med[m][Param.joursT * s + j], "=", parWeekend[s][m][j]).post();
+					model.arithm(parSemaine[s][m][5+j], "=", parWeekend[s][m][j]).post();
 
 				}
 			}

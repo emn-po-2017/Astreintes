@@ -22,7 +22,7 @@ public class Solveur {
 	
 	public int[] resoudre() {
 		new Contraintes(variables, model, param);
-		Objectif objectif = new Objectif(variables, model, param, 4);
+		Objectif objectif = new Objectif(variables, model, param, 2);
 		
 		Solver solver = this.model.getSolver();
 		solver.limitTime("10s");

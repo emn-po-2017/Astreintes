@@ -50,11 +50,27 @@ public class Contraintes {
 //				model.arithm(v.getMed()[m][j], "+", v.getMed()[m][j + 1], "<", 2).post();
 //			}
 //		}
+		// Pas 2 le week end
+		for(int s = 0 ; s<param.semaines; s++){
+			for( int m = 0 ; m < param.medecins ; m++ ){
+				model.sum(v.getParWeekend()[s][m], "<", 2).post();
+			}
+		}
 		// Congé
 		for (int i = 0; i < param.medecins; i++) {
 			for (int j = 0; j < param.semaines * Param.joursT; j++) {
 				if (param.tabConge[i][j] == 1) {
 					model.arithm(v.getMed()[i][j], "!=", 1).post();
+				}
+			}
+		}
+		// Pref
+		for(int s = 0 ; s<param.semaines; s++){
+			for( int m = 0 ; m < param.medecins ; m++ ){
+				for(int j = 0 ; j<param.joursT ; j++){
+					if(param.tabPref[m][j] == 0){
+						model.arithm(v.getParSemaine()[s][m][j], "!=", 1).post();
+					}
 				}
 			}
 		}

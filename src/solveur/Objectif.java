@@ -135,7 +135,7 @@ public class Objectif {
 					
 			model.sum(intero, "=", sommeCarree).post();
 	
-			model.scalar(new IntVar[] { sommeNonVoulues, sommeCarree }, new int[] { 1000, 1 }, "=", obj4).post();
+			model.scalar(new IntVar[] { sommeNonVoulues, sommeCarree }, new int[] { 0, 1 }, "=", obj4).post();
 			model.setObjective(Model.MINIMIZE, obj4);
 			
 		}

@@ -18,7 +18,7 @@ public class Faisabilite {
 
 	public boolean faisable() {
 		// TODO Auto-generated method stub
-		return this.testConge() && this.testPref() && this.testPrefConge() ;
+		return /*this.testConge() &&*/ this.testPref() && this.testPrefConge() ;
 	}
 
 	private boolean testPrefConge() {
@@ -101,6 +101,7 @@ public class Faisabilite {
 			boolean jok = false ;
 			while( m < tabConge.length && !jok ){
 				jok = tabConge[m][j] == 1 ;
+				m++;
 			}
 			ok = jok;
 			if(!jok){
@@ -108,7 +109,7 @@ public class Faisabilite {
 			}
 			j++ ;
 		}
-		return true;
+		return ok;
 	}
 
 	public String provenence() {
