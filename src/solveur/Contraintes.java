@@ -67,7 +67,7 @@ public class Contraintes {
 		// Pref
 		for(int s = 0 ; s<param.semaines; s++){
 			for( int m = 0 ; m < param.medecins ; m++ ){
-				for(int j = 0 ; j<param.joursT ; j++){
+				for(int j = 0 ; j<Param.joursT ; j++){
 					if(param.tabPref[m][j] == 0){
 						model.arithm(v.getParSemaine()[s][m][j], "!=", 1).post();
 					}

@@ -23,6 +23,7 @@ public class Main {
 		Read_Informations infos = excel.getInformations();
 		Read_Preferences prefs = excel.getPreferences();
 		Read_Conges conges = excel.getConges();
+		
 		int[][] tabPref = new int[7][7];
 		tabPref[0][0] = 1;
 		tabPref[0][1] = 0;
@@ -80,13 +81,14 @@ public class Main {
 		tabPref[6][5] = 1;
 		tabPref[6][6] = 1;
 		
+//		Faisabilite f = new Faisabilite(prefs.getPrefs(), conges.getConges());
 		Faisabilite f = new Faisabilite(tabPref, conges.getConges());
 
 		/*
 		 * Solver
 		 */
 		if (f.faisable()) {
-			Solveur solveur = new Solveur(infos, conges);
+			Solveur solveur = new Solveur(infos, conges, prefs);
 			int[] resultats = solveur.resoudre();
 			// TODO
 			// Si on trouve une solution -> on affiche le calendrier
@@ -97,6 +99,13 @@ public class Main {
 			 */
 			String output = "Sortie.xls";
 			WriteOutput excel_file = new WriteOutput(output, resultats, infos);
+//			for (int i=0; i<prefs.getPrefs().length; i++) {
+//				for (int j=0; j<prefs.getPrefs()[i].length; j++) {
+//					System.out.println(prefs.getPrefs()[i][j]);
+//				}
+//				System.out.println();
+//			}
+			System.out.println();
 			excel_file.write();
 			Desktop dt = Desktop.getDesktop();
 			dt.open(new File(output));

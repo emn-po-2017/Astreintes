@@ -6,6 +6,7 @@ import org.chocosolver.solver.Solver;
 
 import excel_entrée.Read_Conges;
 import excel_entrée.Read_Informations;
+import excel_entrée.Read_Preferences;
 
 
 public class Solveur {
@@ -14,9 +15,9 @@ public class Solveur {
 	private Param param;
 	private Variables variables;
 	
-	public Solveur(Read_Informations infos, Read_Conges conges) {
+	public Solveur(Read_Informations infos, Read_Conges conges, Read_Preferences prefs) {
 		this.model = new Model();
-		this.param = new Param(infos, conges);
+		this.param = new Param(infos, conges, prefs);
 		this.variables = new Variables(this.model, this.param);
 	}
 	

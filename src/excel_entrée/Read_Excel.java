@@ -29,7 +29,7 @@ public class Read_Excel {
             Sheet pref_sheet = w.getSheet(1); //Feuille excel "Préférences"
             Sheet conges_sheet = w.getSheet(2); //Feuille excel "Congés"
             this.infos = new Read_Informations(infos_sheet);
-            this.prefs = new Read_Preferences(pref_sheet);
+            this.prefs = new Read_Preferences(pref_sheet, this.infos);
             this.conges = new Read_Conges(conges_sheet, this.infos);
         } 
         catch (BiffException e) {

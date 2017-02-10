@@ -112,4 +112,22 @@ public class Tools {
 			System.out.println("départ :" + i + "  fin :" + a);
 		}
 	}
+    
+    /**
+	 * Retourne l'entier correspondant au jour de la semaine (String en entrée)
+	 */
+    public static int getDayWeek(String string_day_week) {
+        int day_week;
+        switch (string_day_week) {
+            case "Lundi": day_week=0; break;
+            case "Mardi": day_week=1; break;
+            case "Mercredi": day_week=2; break;
+            case "Jeudi": day_week=3; break;
+            case "Vendredi": day_week=4; break;
+            case "Samedi": day_week=5; break;
+            case "Dimanche": day_week=6; break;
+            default: day_week=-1; break;
+        }
+        return day_week;
+    }
 }
