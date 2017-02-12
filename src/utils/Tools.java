@@ -105,14 +105,6 @@ public class Tools {
     	return week_day;
     }
     
-    public static void main(String[] args) {
-		for (int i=0; i<12; i++) {
-			
-			int a = (i+6-1)%12;
-			System.out.println("départ :" + i + "  fin :" + a);
-		}
-	}
-    
     /**
 	 * Retourne l'entier correspondant au jour de la semaine (String en entrée)
 	 */
@@ -130,4 +122,20 @@ public class Tools {
         }
         return day_week;
     }
+    
+    /**
+     * Retourne une date "DD/MM/YYYY" (String) en fonction du nombre de jours écoulés
+     */
+    public static String getDate(int jours_ecoules, int start_month, int start_year) {
+    	Calendar c = Calendar.getInstance();
+    	int number_days = getNumeroFirstLundi(start_year, start_month) + jours_ecoules;
+    	c.set(start_year, start_month, number_days, 0, 0, 0);
+    	
+    	int year = c.get(Calendar.YEAR);
+    	int month = c.get(Calendar.MONTH);
+    	int day = c.get(Calendar.DATE);
+    	String date = Integer.toString(day) + "/" + Integer.toString(month) + "/" + Integer.toString(year);
+    	return date;
+    }
+    
 }
