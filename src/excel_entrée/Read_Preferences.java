@@ -25,7 +25,7 @@ public class Read_Preferences {
 			/*
 			 * col = 1 -> préférence semaine 1
 			 * col = 2 -> préférence semaine 2
-			 * col = 3 -> préférence week-end
+			 * col = 3 -> préférence semaine 3
 			 */
 			for (int col=1; col<4; col++) {
 				String day = sheet.getCell(col, l).getContents();
