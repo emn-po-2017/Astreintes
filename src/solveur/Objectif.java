@@ -105,7 +105,7 @@ public class Objectif {
 			}
 			IntVar sommeWeekend = model.intVar("somme", 0, 9999);
 			model.sum(interBis, "=", sommeWeekend).post();
-			model.scalar(new IntVar[] { sommeSemaine, sommeWeekend }, new int[] { 1, 10 }, "=", obj2).post();
+			model.scalar(new IntVar[] { sommeSemaine, sommeWeekend }, new int[] { 0, 1 }, "=", obj2).post();
 			model.setObjective(Model.MINIMIZE, obj2);
 		}
 		

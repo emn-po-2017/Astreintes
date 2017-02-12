@@ -34,63 +34,8 @@ public class Param {
 		this.nbAstreinteWeekendMax = (semaines*joursW/medecins)+2;
 		this.tabConge = conges.getConges();
 		//this.tabPref = prefs.getPrefs();
-		this.tabPref=new int[this.medecins][joursT];
+		this.tabPref = prefs.getPrefs() ;
 		
-		tabPref[0][0]=1;
-		tabPref[0][1]=0;
-		tabPref[0][2]=1;
-		tabPref[0][3]=0;
-		tabPref[0][4]=1;
-		tabPref[0][5]=1;
-		tabPref[0][6]=1;
-		
-		tabPref[1][0]=1;
-		tabPref[1][1]=1;
-		tabPref[1][2]=0;
-		tabPref[1][3]=0;
-		tabPref[1][4]=1;
-		tabPref[1][5]=1;
-		tabPref[1][6]=1;
-		
-		tabPref[2][0]=1;
-		tabPref[2][1]=1;
-		tabPref[2][2]=0;
-		tabPref[2][3]=0;
-		tabPref[2][4]=1;
-		tabPref[2][5]=1;
-		tabPref[2][6]=1;
-		
-		tabPref[3][0]=1;
-		tabPref[3][1]=0;
-		tabPref[3][2]=1;
-		tabPref[3][3]=1;
-		tabPref[3][4]=0;
-		tabPref[3][5]=1;
-		tabPref[3][6]=1;
-		
-		tabPref[4][0]=0;
-		tabPref[4][1]=0;
-		tabPref[4][2]=1;
-		tabPref[4][3]=1;
-		tabPref[4][4]=1;
-		tabPref[4][5]=1;
-		tabPref[4][6]=1;
-		
-		tabPref[5][0]=1;
-		tabPref[5][1]=0;
-		tabPref[5][2]=0;
-		tabPref[5][3]=1;
-		tabPref[5][4]=1;
-		tabPref[5][5]=1;
-		tabPref[5][6]=1;
-		
-		tabPref[6][0]=0;
-		tabPref[6][1]=1;
-		tabPref[6][2]=1;
-		tabPref[6][3]=1;
-		tabPref[6][4]=0;
-		tabPref[6][5]=1;
-		tabPref[6][6]=1;
 		
 		
 		

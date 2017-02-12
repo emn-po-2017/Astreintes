@@ -56,6 +56,17 @@ public class Contraintes {
 				model.sum(v.getParWeekend()[s][m], "<", 2).post();
 			}
 		}
+		// Pas 3 d'affilée ( Dimanche - Lundi - Mardi et Jeudi-Vendredi-Samedi )
+		for(int s = 0 ; s<param.semaines; s++){
+			for( int m = 0 ; m < param.medecins ; m++ ){
+				model.sum(v.getJVS()[s][m], "<", 3).post();
+			}
+		}
+		for(int s = 0 ; s<param.semaines; s++){
+			for( int m = 0 ; m < param.medecins ; m++ ){
+	//			model.sum(v.getDLM()[s][m], "<", 3).post();
+			}
+		}
 		// Congé
 		for (int i = 0; i < param.medecins; i++) {
 			for (int j = 0; j < param.semaines * Param.joursT; j++) {
@@ -65,7 +76,7 @@ public class Contraintes {
 			}
 		}
 		// Pref
-		for(int s = 0 ; s<param.semaines; s++){
+		for(int s = 0 ; s <param.semaines; s++){
 			for( int m = 0 ; m < param.medecins ; m++ ){
 				for(int j = 0 ; j<Param.joursT ; j++){
 					if(param.tabPref[m][j] == 0){

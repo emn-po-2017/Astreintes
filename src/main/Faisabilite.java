@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 
 import excel_entrée.Read_Informations;
+import solveur.Param;
 
 public class Faisabilite {
 	
@@ -10,15 +11,20 @@ public class Faisabilite {
 	int[][] tabPref ;
 	String Erreur = "Type Erreur : \n";
 	String[] jours = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"} ;
-	
-	public Faisabilite(int[][] tabPref, int[][] tabConge){
+	Read_Informations infos ;
+	public Faisabilite(int[][] tabPref, int[][] tabConge , Read_Informations infos){
 		this.tabConge = tabConge ;
 		this.tabPref = tabPref ;
+		this.infos = infos ;
 	}
 
 	public boolean faisable() {
 		// TODO Auto-generated method stub
-		return /*this.testConge() &&*/ this.testPref() && this.testPrefConge() ;
+		boolean un = this.testConge() ;
+		boolean deux = this.testPrefSemaine() ;
+		boolean trois = this.testPrefMedecin() ;
+		boolean quatre = this.testPrefConge() ;
+		return un && deux && trois && quatre ;
 	}
 
 	private boolean testPrefConge() {
@@ -52,18 +58,37 @@ public class Faisabilite {
 				}
 				if(dispo[j].isEmpty()){				
 					System.out.println(ms.get(0));
-					this.Erreur = this.Erreur +"Les médecins " +ms.get(0);
+					this.Erreur = this.Erreur +"Les médecins " + this.infos.getDoctors().get(ms.get(0));
 					for(int k = 1 ; k<ms.size() ; k++){
-						this.Erreur = this.Erreur + ", "+ ms.get(k); 
+						this.Erreur = this.Erreur + ", "+ this.infos.getDoctors().get(ms.get(k)); 
 					}
-					this.Erreur = this.Erreur + " sont en congé le jour "+ j + " et sont les seuls désirant travailler le "+ this.jours[j%7]+".\n";
+					this.Erreur = this.Erreur + " sont en congé le jour "+ utils.Tools.getDate(j+1,infos.getStartMonth(), infos.getStartYear()) + " et sont les seuls désirant travailler le "+ this.jours[j%7]+".\n";
 				}
 			}
 		}
 		return ok;
 	}
+	
+	private boolean testPrefMedecin(){
+		boolean ok = true ;
+		int j = 0 ;
+		while( j < tabPref.length && ok ){
+			int cpt = 0 ;
+			for(int m = 0 ; m< Param.joursS ; m++ ){
+				if( this.tabPref[j][m] == 1){
+					cpt++;
+				}
+			}
+			ok = (cpt>=3);
+			if( !ok){
+				this.Erreur = this.Erreur + "Le médecin "+this.infos.getDoctors().get(j)+" doit choisir au minimum 3 préférences en semaine.\n";
+			}
+			j++;
+		}
+		return ok ;
+	}
 
-	private boolean testPref() {
+	private boolean testPrefSemaine() {
 		// TODO Auto-generated method stub
 		boolean ok = true ;
 		int j = 0 ;
@@ -75,14 +100,9 @@ public class Faisabilite {
 				}
 			}
 			if( j < 5){
-				ok = cpt >= 2 ;
-				if(!ok){
-					Erreur = Erreur + " Il manque "+ (2-cpt)+" préférence(s) le " + this.jours[j]+".\nRappel : 2 mininimum par jour en semaine." ; 
-				}
-			}else{
 				ok = cpt >= 3 ;
 				if(!ok){
-					Erreur = Erreur + " Il manque "+ (3-cpt)+" préférence(s) le " + this.jours[j]+".\nRappel : 3 mininimum par jour de week-end." ; 
+					Erreur = Erreur + "Il manque "+ (3-cpt)+" préférence(s) le " + this.jours[j]+".\nRappel : 3 mininimum par jour en semaine.\n" ; 
 				}
 			}
 			j++ ;
@@ -96,16 +116,16 @@ public class Faisabilite {
 		// test journalier
 		int j = 0 ;
 		boolean ok = true ;
+		int cpt = 0 ;
 		while( j<this.tabConge[0].length && ok ){
-			int m = 0 ;
-			boolean jok = false ;
-			while( m < tabConge.length && !jok ){
-				jok = tabConge[m][j] == 1 ;
-				m++;
+			for(int m = 0 ; m < this.tabConge.length ; m++ ){
+				if(this.tabConge[m][j] == 1){
+					cpt++;
+				}
 			}
-			ok = jok;
-			if(!jok){
-				this.Erreur = this.Erreur + " Tous les médecins sont en congés le jour "+j+ ".\n";
+			ok = !(cpt == this.tabConge[0].length);
+			if(!ok){
+				this.Erreur = this.Erreur + " Tous les médecins sont en congés le jour "+utils.Tools.getDate(j+1,infos.getStartMonth(), infos.getStartYear())+ ".\n";
 			}
 			j++ ;
 		}
@@ -131,9 +151,7 @@ public class Faisabilite {
 			{1,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0}};		
-		Faisabilite f = new Faisabilite( tabpref , tabconge );
-		System.out.println(f.faisable());
-		System.out.println(f.provenence());
+		
 	}
 
 }

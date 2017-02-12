@@ -3,8 +3,11 @@ package main;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-
 import excel_entrée.MessageErreurEntree;
+
+import javax.swing.JOptionPane;
+import javax.swing.plaf.synth.SynthScrollBarUI;
+
 import excel_entrée.Read_Conges;
 import excel_entrée.Read_Excel;
 import excel_entrée.Read_Informations;
@@ -36,65 +39,65 @@ public class Main {
 		 * 2. Analyse faisabilité
 		 */
 		else {
-			int[][] tabPref = new int[7][7];
-			tabPref[0][0] = 1;
-			tabPref[0][1] = 0;
-			tabPref[0][2] = 1;
-			tabPref[0][3] = 0;
-			tabPref[0][4] = 0;
-			tabPref[0][5] = 1;
-			tabPref[0][6] = 1;
-
-			tabPref[1][0] = 1;
-			tabPref[1][1] = 0;
-			tabPref[1][2] = 1;
-			tabPref[1][3] = 0;
-			tabPref[1][4] = 1;
-			tabPref[1][5] = 1;
-			tabPref[1][6] = 1;
-
-			tabPref[2][0] = 0;
-			tabPref[2][1] = 1;
-			tabPref[2][2] = 0;
-			tabPref[2][3] = 1;
-			tabPref[2][4] = 0;
-			tabPref[2][5] = 1;
-			tabPref[2][6] = 1;
-
-			tabPref[3][0] = 0;
-			tabPref[3][1] = 1;
-			tabPref[3][2] = 0;
-			tabPref[3][3] = 1;
-			tabPref[3][4] = 0;
-			tabPref[3][5] = 1;
-			tabPref[3][6] = 1;
-
-			tabPref[4][0] = 0;
-			tabPref[4][1] = 0;
-			tabPref[4][2] = 1;
-			tabPref[4][3] = 0;
-			tabPref[4][4] = 1;
-			tabPref[4][5] = 1;
-			tabPref[4][6] = 1;
-
-			tabPref[5][0] = 1;
-			tabPref[5][1] = 0;
-			tabPref[5][2] = 0;
-			tabPref[5][3] = 0;
-			tabPref[5][4] = 1;
-			tabPref[5][5] = 1;
-			tabPref[5][6] = 1;
-
-			tabPref[6][0] = 0;
-			tabPref[6][1] = 0;
-			tabPref[6][2] = 1;
-			tabPref[6][3] = 1;
-			tabPref[6][4] = 0;
-			tabPref[6][5] = 1;
-			tabPref[6][6] = 1;
+//			int[][] tabPref = new int[7][7];
+//			tabPref[0][0]=1;
+//			tabPref[0][1]=0;
+//			tabPref[0][2]=1;
+//			tabPref[0][3]=0;
+//			tabPref[0][4]=1;
+//			tabPref[0][5]=1;
+//			tabPref[0][6]=1;
+//			
+//			tabPref[1][0]=1;
+//			tabPref[1][1]=1;
+//			tabPref[1][2]=0;
+//			tabPref[1][3]=0;
+//			tabPref[1][4]=1;
+//			tabPref[1][5]=1;
+//			tabPref[1][6]=1;
+//			
+//			tabPref[2][0]=1;
+//			tabPref[2][1]=1;
+//			tabPref[2][2]=0;
+//			tabPref[2][3]=0;
+//			tabPref[2][4]=1;
+//			tabPref[2][5]=1;
+//			tabPref[2][6]=1;
+//			
+//			tabPref[3][0]=1;
+//			tabPref[3][1]=0;
+//			tabPref[3][2]=1;
+//			tabPref[3][3]=1;
+//			tabPref[3][4]=0;
+//			tabPref[3][5]=1;
+//			tabPref[3][6]=1;
+//			
+//			tabPref[4][0]=0;
+//			tabPref[4][1]=0;
+//			tabPref[4][2]=1;
+//			tabPref[4][3]=1;
+//			tabPref[4][4]=1;
+//			tabPref[4][5]=1;
+//			tabPref[4][6]=1;
+//			
+//			tabPref[5][0]=1;
+//			tabPref[5][1]=0;
+//			tabPref[5][2]=0;
+//			tabPref[5][3]=1;
+//			tabPref[5][4]=1;
+//			tabPref[5][5]=1;
+//			tabPref[5][6]=1;
+//			
+//			tabPref[6][0]=0;
+//			tabPref[6][1]=1;
+//			tabPref[6][2]=1;
+//			tabPref[6][3]=1;
+//			tabPref[6][4]=0;
+//			tabPref[6][5]=1;
+//			tabPref[6][6]=1;
 			
 //			Faisabilite f = new Faisabilite(prefs.getPrefs(), conges.getConges());
-			Faisabilite f = new Faisabilite(tabPref, conges.getConges());
+			Faisabilite f = new Faisabilite(prefs.getPrefs(), conges.getConges(), infos);
 
 			/*
 			 * 3. Solver
@@ -102,6 +105,24 @@ public class Main {
 			if (f.faisable()) {
 				Solveur solveur = new Solveur(infos, conges, prefs);
 				int[] resultats = solveur.resoudre();
+				int cpt = 0 ;
+				for(int i = 0 ; i<resultats.length ; i++ ){
+					if( resultats[i] == 0){
+						cpt ++ ;
+					}
+				}
+				if( cpt > 100 ){
+					JOptionPane d = new JOptionPane();
+					JOptionPane.showMessageDialog(
+							d, 
+							"Pas de solution trouvée.\n"
+							+ "Piste de résolution :\n"
+							+ "Pour un médecin : Evitez les couples de préférences 'Lundi-Mardi' ou 'Jeudi-Vendredi'.", 
+							"Erreur",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					
 				// TODO
 				// Si on trouve une solution -> on affiche le calendrier
 				// Sinon on affiche un calendrier "faux"
@@ -121,8 +142,14 @@ public class Main {
 				excel_file.write();
 				Desktop dt = Desktop.getDesktop();
 				dt.open(new File(output));
+				}
 			} else {
-				System.out.println(f.provenence());
+				JOptionPane d = new JOptionPane();
+				JOptionPane.showMessageDialog(
+						d, 
+						f.provenence(), 
+						"Erreur",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

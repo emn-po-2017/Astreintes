@@ -1,6 +1,7 @@
 package excel_entrée;
 
 import jxl.Sheet;
+import solveur.Param;
 import utils.Tools;
 
 public class Read_Preferences {
@@ -11,10 +12,16 @@ public class Read_Preferences {
 	public Read_Preferences(Sheet sheet, Read_Informations infos) {
 		this.log = "";
 		
-		this.preferences = new int[infos.getDoctors().size()][7];
+		this.preferences = new int[infos.getDoctors().size()][Param.joursT];
 		for (int i=0; i<preferences.length; i++) {
 			for (int j=0; j<preferences[i].length; j++) {
-				preferences[i][j] = 1;
+				if( j<Param.joursS){
+					preferences[i][j] = 0;
+				}
+				else{
+					preferences[i][j] = 1;
+				}
+				
 			}
 		}
 		
@@ -36,7 +43,7 @@ public class Read_Preferences {
 					String day = sheet.getCell(col, l).getContents();
 					int dayweek = Tools.getDayWeek(day); //numéro du jour de la semaine
 					if (dayweek != -1) { 
-						preferences[l-2][dayweek] = 0;
+						preferences[l-2][dayweek] = 1;
 					}
 				}
 				
@@ -61,8 +68,8 @@ public class Read_Preferences {
 	 */
 	public boolean isEnoughPref(int[][] prefs, int medecin) {
 		int compteur = 0;
-		for (int i=0; i<prefs[medecin].length; i++) {
-			if (prefs[medecin][i] == 0) {
+		for (int i=0; i<Param.joursS; i++) {
+			if (prefs[medecin][i] == 1) {
 				compteur++;
 			}
 		}

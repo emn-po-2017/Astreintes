@@ -19,7 +19,8 @@ public class Variables {
 	BoolVar[][][] parSemaine5;
 	BoolVar[][][] parWeekend;
 	BoolVar[][] medNonVoulu;
-
+	BoolVar[][][] JVS ;
+	BoolVar[][][] DLM ;
 	
 
 	public Variables(Model model, Param param) {
@@ -35,7 +36,9 @@ public class Variables {
 		this.parSemaine5 = new BoolVar[param.semaines][param.medecins][Param.joursS];
 		this.parWeekend = new BoolVar[param.semaines][param.medecins][Param.joursW];
 		this.medNonVoulu= new BoolVar[param.medecins][param.semaines*Param.joursT];
-
+		this.JVS = new BoolVar[param.semaines][param.medecins][3];
+		this.DLM = new BoolVar[param.semaines][param.medecins][3];
+		
 		// 2 tableaux identiques
 		for (int i = 0; i < Param.joursT * param.semaines; i++) {
 			for (int j = 0; j < param.medecins; j++) {
@@ -48,15 +51,6 @@ public class Variables {
 			for (int s = 0; s < param.semaines; s++) {
 				for (int j = 0; j < Param.joursS; j++) {
 					model.arithm(med5[m][Param.joursS * s + j], "=", med[m][Param.joursT * s + j]).post();
-				}
-			}
-		}
-		// tableau des jours de weekend
-
-		for (int m = 0; m < param.medecins; m++) {
-			for (int s = 0; s < param.semaines; s++) {
-				for (int j = 0; j < Param.joursW; j++) {
-					model.arithm(med2[m][Param.joursW * s + j], "=", med[m][Param.joursT * s + j + Param.joursS]).post();
 				}
 			}
 		}
@@ -99,6 +93,47 @@ public class Variables {
 				for (int j = 0; j < Param.joursW; j++) {
 					model.arithm(parSemaine[s][m][5+j], "=", parWeekend[s][m][j]).post();
 
+				}
+			}
+		}
+		// 1 tableau JVS
+		for (int s = 0; s < param.semaines; s++) {
+			JVS[s] = model.boolVarMatrix(param.medecins, 3);
+		}
+
+		for (int m = 0; m < param.medecins; m++) {
+			for (int s = 0; s < param.semaines; s++) {
+				for (int j = 0; j < 3 ; j++) {
+					model.arithm(parSemaine[s][m][3+j], "=", JVS[s][m][j]).post();
+
+				}
+			}
+		}
+		
+		// 1 tableau DLM
+		for (int s = 0; s < param.semaines; s++) {
+			DLM[s] = model.boolVarMatrix(param.medecins, 3);
+		}
+
+		for (int m = 0; m < param.medecins; m++) {
+			for (int s = 1; s < param.semaines; s++) {
+				for (int j = 0; j < 3 ; j++) {
+					if(j==0){
+						model.arithm(parSemaine[s-1][m][6], "=", DLM[s-1][m][j]).post();
+					}
+					else{
+						model.arithm(parSemaine[s][m][j-1], "=", DLM[s-1][m][j]).post();
+					}
+
+				}
+			}
+		}
+		// tableau des jours de weekend
+
+		for (int m = 0; m < param.medecins; m++) {
+			for (int s = 0; s < param.semaines; s++) {
+				for (int j = 0; j < Param.joursW; j++) {
+					model.arithm(med2[m][Param.joursW*s +j], "=", parWeekend[s][m][j]).post();
 				}
 			}
 		}
@@ -165,6 +200,12 @@ public class Variables {
 
 	public BoolVar[][][] getParWeekend() {
 		return parWeekend;
+	}
+	public BoolVar[][][] getJVS() {
+		return JVS;
+	}
+	public BoolVar[][][] getDLM() {
+		return DLM;
 	}
 
 	public void setParWeekend(BoolVar[][][] parWeekend) {

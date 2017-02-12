@@ -1,6 +1,8 @@
 package solveur;
 
 
+import javax.swing.JOptionPane;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 
@@ -47,8 +49,6 @@ public class Solveur {
 				}
 			}
 		}
-		System.out.println(c);
-
 		
 		//============ AFFICHAGE
 		int compteur = 0;
