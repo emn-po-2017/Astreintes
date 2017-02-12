@@ -16,8 +16,9 @@ import solveur.Solveur;
 public class Main {
 
 	public static void main(String[] args) throws IOException, WriteException {
+		
 		/*
-		 * Lecture des données d'entrée
+		 * 1. Lecture des données d'entrée
 		 */
 		String input = "Saisie.xls";
 		Read_Excel excel = new Read_Excel(input);
@@ -25,11 +26,15 @@ public class Main {
 		Read_Preferences prefs = excel.getPreferences();
 		Read_Conges conges = excel.getConges();
 		
-		MessageErreurEntree msgErreurEntree = new MessageErreurEntree(conges);
+		//On affiche un message d'erreur si le excel Saisie a été mal rempli
+		MessageErreurEntree msgErreurEntree = new MessageErreurEntree(prefs, conges);
 		if (msgErreurEntree.isError()) {
 			msgErreurEntree.displayError();
 		}
 		
+		/*
+		 * 2. Analyse faisabilité
+		 */
 		else {
 			int[][] tabPref = new int[7][7];
 			tabPref[0][0] = 1;
@@ -92,7 +97,7 @@ public class Main {
 			Faisabilite f = new Faisabilite(tabPref, conges.getConges());
 
 			/*
-			 * Solver
+			 * 3. Solver
 			 */
 			if (f.faisable()) {
 				Solveur solveur = new Solveur(infos, conges, prefs);
@@ -102,7 +107,7 @@ public class Main {
 				// Sinon on affiche un calendrier "faux"
 
 				/*
-				 * Ecriture du fichier sortant
+				 * 4. Ecriture du fichier sortant
 				 */
 				String output = "Sortie.xls";
 				WriteOutput excel_file = new WriteOutput(output, resultats, infos);

@@ -33,7 +33,7 @@ public class Read_Conges {
         		
         		//Si erreur dans le nom du médecin
         		if (id == -1) {
-        			log += "Erreur orthographe : " + doc + "\n" ;
+        			log += "Congés erreur orthographe : " + doc + "\n" ;
         		}
         		
         		else {
@@ -44,7 +44,7 @@ public class Read_Conges {
             		
             		//Si erreur dans la date spécifiée des congés
             		if (start == -1 || end == -1) {
-            			log += "Erreur date : " + _start + " - " + _end + "\n" ;
+            			log += "Congés erreur date : " + _start + " - " + _end + "\n" ;
             		}
             		else {
             			for (int i=start; i<=end; i++) {
