@@ -3,6 +3,8 @@ package excel_entrée;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -10,7 +12,6 @@ import jxl.read.biff.BiffException;
 public class Read_Excel {
 
 	private String path; //chemin d'accès au fichier Excel
-
 	private Read_Informations infos; //informations générales
 	private Read_Preferences prefs; //informations avec les préférences
 	private Read_Conges conges; //informations avec les conges
@@ -22,6 +23,17 @@ public class Read_Excel {
   
     public void read() throws IOException  {
         File inputWorkbook = new File(path);
+        if(!inputWorkbook.exists()){
+        	JOptionPane d = new JOptionPane();
+			JOptionPane.showMessageDialog(
+					d, 
+					"Fichier Saisie.xls introuvable.\n"
+					+ "Vérifier que Saisie.xls est dans le même répertoire.", 
+					"Erreur",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+        }
+        else{
         Workbook w;
         try {
         	w = Workbook.getWorkbook(inputWorkbook);
@@ -34,6 +46,7 @@ public class Read_Excel {
         } 
         catch (BiffException e) {
                 e.printStackTrace();
+        }
         }
     }
     

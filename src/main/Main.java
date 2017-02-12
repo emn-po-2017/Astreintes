@@ -141,8 +141,7 @@ public class Main {
 				System.out.println();
 				excel_file.write();
 				Desktop dt = Desktop.getDesktop();
-				dt.open(new File(output));
-				}
+				dt.open(new File(output));				}
 			} else {
 				JOptionPane d = new JOptionPane();
 				JOptionPane.showMessageDialog(
