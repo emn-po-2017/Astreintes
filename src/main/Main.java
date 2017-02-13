@@ -130,7 +130,7 @@ public class Main {
 				/*
 				 * 4. Ecriture du fichier sortant
 				 */
-				String output = "Sortie.xls";
+				String output = "Planning.xls";
 				WriteOutput excel_file = new WriteOutput(output, resultats, infos);
 //				for (int i=0; i<prefs.getPrefs().length; i++) {
 //					for (int j=0; j<prefs.getPrefs()[i].length; j++) {
