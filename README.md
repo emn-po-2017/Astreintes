@@ -2,32 +2,33 @@
 
 Ce projet est un **plannificateur d'astreintes médicales** répondant à un cahier des charges spécifique. Il résout un problème d'optimisation par contraintes (minimisation d'une fonction objectif) à l'aide du solveur Choco.
 
-##Motivation
+## Motivation
 
-Ce projet entre dans le cadre de l'enseignement de 3e année de Formation Ingénieur en option Génie Informatique Pour l'Aide à la Décision, à l'Institu Mines-Télécom Atlantique (anciennement Ecoles des Mines de Nantes). Il s'agit d'un Projet d'Option, réalisé par un groupe d'étudiants (quatre au total). Il est réalisé durant le 1er semestre. Le sujet a été choisi par les étudiants à partir d'une liste prédéfinie par le responsable d'option Xavier Lorca. Ce projet constitue une Unité de Valeur pour le semetre 1 de l'année 3 et fait donc l'objet d'une évalutation.
+Ce projet entre dans le cadre de l'enseignement de 3e année de Formation Ingénieur en option Génie Informatique Pour l'Aide à la Décision, à l'Institut Mines-Télécom Atlantique (anciennement Ecoles des Mines de Nantes). Il s'agit d'un Projet d'Option, réalisé par un groupe d'étudiants (quatre au total). Il est réalisé durant le 1er semestre. Le sujet a été choisi par les étudiants à partir d'une liste prédéfinie par le responsable d'option Xavier Lorca. Ce projet constitue une Unité de Valeur pour le semetre 1 de l'année 3 et fait donc l'objet d'une évalutation.
 
-##Installation
+## Installation
 
 Requiert : JAVA JDK 1.8, Microsoft Excel
 
-###Comme projet Java
+### Comme projet Java
 
 Importer le projet sous Eclipse à l'aide de Git (Fork).
+<https://github.com/emn-po-2017/astreintes>
 
-###Comme application exécutable
+### Comme application exécutable
 
 Télécharger le projet et éxécuter l'archive JAR contenue dans le dossier.
 
-##Références
+## Références
 
 **Choco solver**
 <http://www.choco-solver.org/>
 
-##Tests
+## Tests
 
 Le fichier 'Saisie.xls' contient les entrées attendues par le programme pour calculer un planning. Il est prérempli et permet donc d'exécuter une planification test. 
 
-##Auteurs
+## Auteurs
 
 Les étudiants auteurs du projet sont :
 * Benjamin Machecourt
