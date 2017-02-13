@@ -3,6 +3,8 @@ package excel_sortie;
 import java.util.Calendar;
 
 import excel_entrée.Read_Informations;
+import jxl.format.Border;
+import jxl.format.BorderLineStyle;
 import jxl.format.Colour;
 import jxl.write.Label;
 import jxl.write.Number;
@@ -66,14 +68,22 @@ public class Calendrier {
 			int year, int month)
     		throws RowsExceededException, WriteException {
 		
-    	//Ajout du nom du mois
-    	String name_month = Tools.getMonth(month);
-    	sheet.addCell(new Label(COL, LIN, name_month));
+    	//1. Ajout du nom du mois
+		WritableFont cellFont = new WritableFont(WritableFont.ARIAL, 10);
+		cellFont.setBoldStyle(WritableFont.BOLD);
+		WritableCellFormat format_mois = new WritableCellFormat(cellFont);
+		format_mois.setBorder(Border.ALL, BorderLineStyle.THIN);
+		format_mois.setBackground(Colour.TAN);
+		String name_month = Tools.getMonth(month);
+    	sheet.addCell(new Label(COL, LIN, name_month, format_mois));
     	LIN++;
     	
-    	//Ajout des jours de la semaine
+    	//2. Ajout des jours de la semaine
+    	WritableCellFormat format_jour = new WritableCellFormat();
+	    format_jour.setBorder(Border.ALL, BorderLineStyle.THIN);
+		format_jour.setBackground(Colour.IVORY);
     	for (int i=0; i<WEEK_DAYS.length; i++) {
-        	sheet.addCell(new Label(COL+i, LIN, WEEK_DAYS[i]));
+        	sheet.addCell(new Label(COL+i, LIN, WEEK_DAYS[i], format_jour));
         }
     	LIN++;
     	
@@ -85,7 +95,7 @@ public class Calendrier {
     	calendar.set(year, month, 1, 0, 0, 0);
     	int week_day = Tools.getWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
     	
-    	//Remplissage des jours
+    	//3. Remplissage des jours
     	int day = 1;
     	COL = week_day;
     	
@@ -140,6 +150,7 @@ public class Calendrier {
 		  Colour colour = getColour(i);
 		  WritableFont cellFont = new WritableFont(WritableFont.ARIAL, 10);
 		  WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+		  cellFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
 		  cellFormat.setBackground(colour);
 		  return cellFormat;
 	  }
@@ -151,9 +162,9 @@ public class Calendrier {
 		  Colour colour;
 		  switch (i) {
 		  case 0: colour=Colour.BLUE2; break;
-		  case 1: colour=Colour.ORANGE; break;
+		  case 1: colour=Colour.LIME; break;
 		  case 2: colour=Colour.GREEN; break;
-		  case 3: colour=Colour.PINK2; break;
+		  case 3: colour=Colour.LAVENDER; break;
 		  case 4: colour=Colour.PALE_BLUE; break;
 		  case 5: colour=Colour.RED; break;
 		  case 6: colour=Colour.GOLD; break;
@@ -172,28 +183,43 @@ public class Calendrier {
 	  public void createLegend() throws RowsExceededException, WriteException {
 		  int col = 9;
 		  int lig = 3;
+		  
+		  //Format avec bordures pour cellule
+		  WritableCellFormat format = new WritableCellFormat();
+		  format.setBorder(Border.ALL, BorderLineStyle.THIN);
+		  
+		  //1. Noms des médecins et couleurs associées
 		  int nb_doctors = infos.getDoctors().size();
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Label(col, lig+i, infos.getDoctors().get(i)));
+			  sheet.addCell(new Label(col, lig+i, infos.getDoctors().get(i), format));
 			  sheet.addCell(new Label(col+1, lig+i, "", getCellFormat(i)));
 		  }
 		  
-		  //nombre d'astreintes totales
-		  sheet.addCell(new Label(col+2, lig-1, "total"));
+		  //on extrait le docteur avec le plus long nom
+		  int length_name = 0;
+		  for (int d=0; d<nb_doctors; d++) {
+			  if (length_name < infos.getDoctors().get(d).length()) {
+				  length_name = infos.getDoctors().get(d).length();
+			  }
+		  }
+		  sheet.setColumnView(col, length_name); //on ajuste la taille de la colonne en fonction du plus long nom
+		  
+		  //2. Nombre d'astreintes totales
+		  sheet.addCell(new Label(col+2, lig-1, "Total", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+2, lig + i, this.count_total(i)));
+			  sheet.addCell(new Number(col+2, lig + i, this.count_total(i), format));
 		  }
 		  
-		//nombre d'astreintes week-semaine
-		  sheet.addCell(new Label(col+3, lig-1, "semaine"));
+		  //3. Nombre d'astreintes week-semaine
+		  sheet.addCell(new Label(col+3, lig-1, "Semaine", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+3, lig + i, this.count_semaine(i)));
+			  sheet.addCell(new Number(col+3, lig + i, this.count_semaine(i), format));
 		  }
 		  
-		  //nombre d'astreintes week-end
-		  sheet.addCell(new Label(col+4, lig-1, "we"));
+		  //4. Nombre d'astreintes week-end
+		  sheet.addCell(new Label(col+4, lig-1, "WE", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+4, lig + i, this.count_we(i)));
+			  sheet.addCell(new Number(col+4, lig + i, this.count_we(i), format));
 		  }
 	  }
 	  

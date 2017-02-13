@@ -37,6 +37,15 @@ public class Solveur {
 				+ "\n" + "6: " + objectif.getNbAstreintesParMedecin()[5].getValue() + "\n" + "7: "
 				+ objectif.getNbAstreintesParMedecin()[6].getValue() + "\n");
 		
+		//Ecriture du resultat
+ 		for (int i=0; i<variables.getMed().length; i++) {
+ 			for (int j=0; j<variables.getMed()[i].length; j++) {
+ 				if (variables.getMed()[i][j].getValue() == 1) {
+ 					resultats[j] = i;
+ 				}
+ 			}
+ 		}
+	 		
 		//============ AFFICHAGE CONSOLE
 		int compteur = 0;
 		for (int m=0; m<variables.getMed().length; m++) {
