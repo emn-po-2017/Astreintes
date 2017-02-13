@@ -18,7 +18,6 @@ public class Variables {
 	BoolVar[][][] parSemaine;
 	BoolVar[][][] parSemaine5;
 	BoolVar[][][] parWeekend;
-	BoolVar[][] medNonVoulu;
 	BoolVar[][][] JVS ;
 	BoolVar[][][] DLM ;
 	
@@ -35,7 +34,6 @@ public class Variables {
 		this.parSemaine = new BoolVar[param.semaines][param.medecins][Param.joursT];
 		this.parSemaine5 = new BoolVar[param.semaines][param.medecins][Param.joursS];
 		this.parWeekend = new BoolVar[param.semaines][param.medecins][Param.joursW];
-		this.medNonVoulu= new BoolVar[param.medecins][param.semaines*Param.joursT];
 		this.JVS = new BoolVar[param.semaines][param.medecins][3];
 		this.DLM = new BoolVar[param.semaines][param.medecins][3];
 		
@@ -137,17 +135,6 @@ public class Variables {
 				}
 			}
 		}
-		// jours non voulus
-
-//		for (int m = 0; m < param.medecins; m++) {
-//			for (int j = 0; j < param.semaines * Param.joursT; j++) {
-//				//model.arithm(0, "=", medNonVoulu[m][j]).post();
-//				model.arithm(med[m][j], "=", medNonVoulu[m][j]).post();
-//				if (param.tabPref[m][j] == 0){
-//					model.arithm(med[m][j], "=", medNonVoulu[m][j]).post();
-//				}
-//			}
-//		}
 	}
 
 	public BoolVar[][] getMed() {
@@ -210,8 +197,5 @@ public class Variables {
 
 	public void setParWeekend(BoolVar[][][] parWeekend) {
 		this.parWeekend = parWeekend;
-	}
-	public BoolVar[][] getMedNonVoulu() {
-		return medNonVoulu;
 	}
 }
