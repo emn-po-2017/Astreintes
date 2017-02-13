@@ -13,12 +13,13 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import utils.Legend;
 import utils.Tools;
 
 /*
  * 
  * Cette classe permet la création d'une feuille excel
- * qui contient le calendrier général des astreintes.
+ * qui contient le calendrier d'un médecin.
  * 
  */
 public class Calendrier {
@@ -29,15 +30,19 @@ public class Calendrier {
 	private Read_Informations infos; //Données en entrée
 	private int[] resultats; //Tableau de résultats
 	private int day_number; //Numéro du jour courant (de 0 à nbDeSemaines*7 - 1)
+	private int id; //Id du médecin considéré
 	
-	private static int COL=0; //Curseur colonne
-	private static int LIN=0; //Curseur ligne
+	private int col; //Curseur colonne
+	private int lin; //Curseur ligne
 	
-	public Calendrier(WritableSheet sheet, int[] resultat_solver, Read_Informations infos) {
+	public Calendrier(WritableSheet sheet, int[] resultat_solver, Read_Informations infos, int id) {
 		this.sheet = sheet;
 		this.infos = infos;
 		this.resultats = resultat_solver;
 		this.day_number = 0;
+		this.id = id;
+		this.col = 0;
+		this.lin = 0;
 	}
 	
 	/**
@@ -54,11 +59,18 @@ public class Calendrier {
     		_createMonth(year, month);
     		month++;
     		if (month==12) {year++; month=0;}
-    		LIN++;
+    		lin++;
     	}
     	
-    	//Ajout d'une légende
-    	createLegend();
+    	//Ajout d'une légende pour calendrier général
+    	if (id == -1) {
+    		createLegend_General();
+    	}
+    	//Ajout d'une légend pour calendrier par médecin
+    	else {
+    		createLegend_PerDoc();
+    	}
+    	
     }
     
     /**
@@ -74,18 +86,18 @@ public class Calendrier {
 		WritableCellFormat format_mois = new WritableCellFormat(cellFont);
 		format_mois.setBorder(Border.ALL, BorderLineStyle.THIN);
 		format_mois.setBackground(Colour.TAN);
-		String name_month = Tools.getMonth(month);
-    	sheet.addCell(new Label(COL, LIN, name_month, format_mois));
-    	LIN++;
+    	String name_month = Tools.getMonth(month);
+    	sheet.addCell(new Label(col, lin, name_month, format_mois));
+    	lin++;
     	
     	//2. Ajout des jours de la semaine
     	WritableCellFormat format_jour = new WritableCellFormat();
 	    format_jour.setBorder(Border.ALL, BorderLineStyle.THIN);
 		format_jour.setBackground(Colour.IVORY);
     	for (int i=0; i<WEEK_DAYS.length; i++) {
-        	sheet.addCell(new Label(COL+i, LIN, WEEK_DAYS[i], format_jour));
+        	sheet.addCell(new Label(col+i, lin, WEEK_DAYS[i], format_jour));
         }
-    	LIN++;
+    	lin++;
     	
     	//Combien de jours compte le mois courant ?
     	int nb_jours = Tools.getNumberOfDays(year, month);
@@ -97,7 +109,7 @@ public class Calendrier {
     	
     	//3. Remplissage des jours
     	int day = 1;
-    	COL = week_day;
+    	col = week_day;
     	
     	int offset=0; //offset utilisé que pour la représentation du premier mois
     	if (month == infos.getStartMonth()) {
@@ -105,21 +117,33 @@ public class Calendrier {
     	}
     	
     	while (day <= nb_jours) {
-    		while (COL<7 && day <= nb_jours) {
+    		while (col<7 && day <= nb_jours) {
     			if (offset > 0) { //tant qu'on a un offset, aucun médecin n'est ajouté
-    				sheet.addCell(new Number(COL, LIN, day));
+    				sheet.addCell(new Number(col, lin, day));
     				offset--;
     			}
     			else {
-    				sheet.addCell(new Number(COL, LIN, day));
-    				sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
-        			day_number++;
+    				//Cas du calendrier général
+    				if (id == -1) {
+    					sheet.addCell(new Number(col, lin, day));
+        				sheet.addCell(new Label(col, lin+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
+            			day_number++;
+    				}
+    				//Cas du calendrier par médecin
+    				else {
+    					int doc = (resultats[day_number] == id) ? id : -1;
+        				sheet.addCell(new Number(col, lin, day));
+        				if (doc != -1) {
+        					sheet.addCell(new Label(col, lin+1, "", getCellFormat(doc))); //ajout du doc
+        				}
+            			day_number++;
+    				}
     			}
-    			COL++;
+    			col++;
     			day++;
     		}
-    		COL=0;
-    		LIN = LIN + 3;
+    		col=0;
+    		lin = lin + 3;
     	}
     	
     	//Pour le dernier mois, on termine la dernière semaine
@@ -128,18 +152,29 @@ public class Calendrier {
     		Calendar c = Calendar.getInstance();
         	c.set(year, month, Tools.getNumberOfDays(year, month), 0, 0, 0);
         	int w_d = Tools.getWeekDay(c.get(Calendar.DAY_OF_WEEK));
-        	COL = w_d + 1;
-        	LIN = LIN - 3;
-        	if (COL==7) { COL=0; }
+        	col = w_d + 1;
+        	lin = lin - 3;
+        	if (col==7) { col=0; }
         	int extra_day = 1;
-        	while (COL<7) {
-        		sheet.addCell(new Number(COL, LIN, extra_day));
-        		sheet.addCell(new Label(COL, LIN+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
+        	while (col<7) {
+        		//Cas du calendrier général
+				if (id == -1) {
+					sheet.addCell(new Number(col, lin, extra_day));
+	        		sheet.addCell(new Label(col, lin+1, "", getCellFormat(resultats[day_number]))); //ajout du doc
+				}
+				//Cas du calendrier par médecin
+				else {
+					int doc = (resultats[day_number] == id) ? id : -1;
+	        		sheet.addCell(new Number(col, lin, extra_day));
+	        		if (doc != -1) {
+	        			sheet.addCell(new Label(col, lin+1, "", getCellFormat(doc))); //ajout du doc
+	        		}
+				}
         		day_number++;
         		extra_day++;
-        		COL++;
+        		col++;
         	}
-        	LIN = LIN + 3;
+        	lin = lin + 3;
     	}
     }
 	
@@ -173,14 +208,48 @@ public class Calendrier {
 		  return colour;
 	  }
 	  
-	  //============================================================================
-	  //====== A AMELIORER (formules pour calcul automatique ensuite dans excel)====
-	  //============================================================================
+	  /*
+	   * =============================================================================================
+	   * ===================================== LEGENDES ==============================================
+	   * =============================================================================================
+	   */
 	  
 	  /**
-	   * Ajout d'une légende (nom médecin, couleur et nb d'astreintes associés)
+	   * Ajout d'une légende pour le calendrier par médecin
 	   */
-	  public void createLegend() throws RowsExceededException, WriteException {
+	  public void createLegend_PerDoc() throws RowsExceededException, WriteException {
+		  int col = 9;
+		  int lig = 3;
+		  
+		  //Format avec bordures pour cellule
+		  WritableCellFormat format = new WritableCellFormat();
+		  format.setBorder(Border.ALL, BorderLineStyle.THIN);
+		  
+		  //1. Nom du médecin et couleur associée
+		  int length_name = infos.getDoctors().get(id).length();
+		  Label c = new Label(col, lig, infos.getDoctors().get(id), format);
+		  c.getCellFormat();
+		  sheet.setColumnView(col, length_name); //on ajuste la taille de la colonne au nom du médecin
+		  sheet.addCell(c);
+		  sheet.addCell(new Label(col+1, lig, "", getCellFormat(id)));
+		  
+		  //2. Nombre d'astreintes totales
+		  sheet.addCell(new Label(col+2, lig-1, "Total", format));
+		  sheet.addCell(new Number(col+2, lig, Legend.count_total(id, resultats), format));
+		  
+		  //3. Nombre d'astreintes week-semaine
+		  sheet.addCell(new Label(col+3, lig-1, "Semaine", format));
+		  sheet.addCell(new Number(col+3, lig, Legend.count_semaine(id, resultats, infos), format));
+		  
+		  //4. Nombre d'astreintes week-end
+		  sheet.addCell(new Label(col+4, lig-1, "WE", format));
+		  sheet.addCell(new Number(col+4, lig, Legend.count_we(id, resultats, infos), format));
+	  }
+	  
+	  /**
+	   * Ajout d'une légende pour le calendrier général
+	   */
+	  public void createLegend_General() throws RowsExceededException, WriteException {
 		  int col = 9;
 		  int lig = 3;
 		  
@@ -207,54 +276,19 @@ public class Calendrier {
 		  //2. Nombre d'astreintes totales
 		  sheet.addCell(new Label(col+2, lig-1, "Total", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+2, lig + i, this.count_total(i), format));
+			  sheet.addCell(new Number(col+2, lig + i, Legend.count_total(i, resultats), format));
 		  }
 		  
 		  //3. Nombre d'astreintes week-semaine
 		  sheet.addCell(new Label(col+3, lig-1, "Semaine", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+3, lig + i, this.count_semaine(i), format));
+			  sheet.addCell(new Number(col+3, lig + i, Legend.count_semaine(i, resultats, infos), format));
 		  }
 		  
 		  //4. Nombre d'astreintes week-end
 		  sheet.addCell(new Label(col+4, lig-1, "WE", format));
 		  for (int i=0; i<nb_doctors; i++) {
-			  sheet.addCell(new Number(col+4, lig + i, this.count_we(i), format));
+			  sheet.addCell(new Number(col+4, lig + i, Legend.count_we(i, resultats, infos), format));
 		  }
-	  }
-	  
-	  /**
-	   * Compte le nombre total d'astreintes pour un médecin
-	   */
-	  public int count_total(int i) {
-		  int count = 0;
-		  for (int k=0; k<resultats.length; k++) {
-			  if (resultats[k] == i) {
-				  count++;
-			  }
-		  }
-		  return count;
-	  }
-	  
-	  /**
-	   * Compte le nombre d'astreintes en week-end pour un médecin
-	   */
-	  public int count_we(int i) {
-		  int count = 0;
-		  int k = 5;
-		  while (k < infos.getNbSemaines() * 7) {
-			  if (resultats[k] == i || resultats[k+1] == i) {
-				  count++;
-			  }
-			  k+=7;
-		  }
-		  return count;
-	  }
-	  
-	  /**
-	   * Compte le nombre d'astreintes en semaine pour un médecin
-	   */
-	  public int count_semaine(int i) {
-		  return count_total(i) - count_we(i);
 	  }
 }
