@@ -64,7 +64,7 @@ public class Contraintes {
 		}
 		for(int s = 0 ; s<param.semaines; s++){
 			for( int m = 0 ; m < param.medecins ; m++ ){
-	//			model.sum(v.getDLM()[s][m], "<", 3).post();
+				model.sum(v.getDLM()[s][m], "<", 3).post();
 			}
 		}
 		// Congé
