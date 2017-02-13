@@ -1,8 +1,5 @@
 package solveur;
 
-
-import javax.swing.JOptionPane;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 
@@ -40,17 +37,7 @@ public class Solveur {
 				+ "\n" + "6: " + objectif.getNbAstreintesParMedecin()[5].getValue() + "\n" + "7: "
 				+ objectif.getNbAstreintesParMedecin()[6].getValue() + "\n");
 		
-		int c =0;
-		for (int i=0; i<variables.getMed().length; i++) {
-			for (int j=0; j<variables.getMed()[i].length; j++) {
-				if (variables.getMed()[i][j].getValue() == 1) {
-					resultats[j] = i;
-					c++;
-				}
-			}
-		}
-		
-		//============ AFFICHAGE
+		//============ AFFICHAGE CONSOLE
 		int compteur = 0;
 		for (int m=0; m<variables.getMed().length; m++) {
 			for (int i=0; i<variables.getMed()[m].length; i++) {
@@ -74,36 +61,5 @@ public class Solveur {
 			}
 		}
 		return resultats;
-		
-		/**
-		 * Affichage des résultats
-		 * 
-		 */
-		/*
-		 * if (solver.solve()) {
-		 * 
-		 * System.out.println( objectif);
-		 * 
-		 * for (int m = 0; m < medecins; m++) { System.out.print("\nM" + m +
-		 * " "); for (int j = 0; j < joursT * semaines; j++) {
-		 * System.out.print(med[m][j].getValue() + " "); } }
-		 * System.out.println(); for (int s = 0; s < joursS * semaines; s++) {
-		 * System.out.print("\nJ" + s + " "); for (int m = 0; m < medecins; m++)
-		 * { System.out.print(med[m][s].getValue() + " "); } }
-		 * 
-		 * for (int s = 0; s < semaines; s++) { System.out.print("\nS" + s); for
-		 * (int m = 0; m < medecins; m++) { System.out.print("\nM" + m); for
-		 * (int j = 0; j < joursT; j++) { System.out.print(" " +
-		 * parSemaine[s][m][j].getValue()); } }
-		 * 
-		 * } System.out.println("\n\nNb d'astreintes en semaine"); for (int m =
-		 * 0; m < medecins; m++) { int nbAstreintes = 0; for (int i = 0; i <
-		 * joursS * semaines; i++) { nbAstreintes += med5[m][i].getValue(); }
-		 * System.out.print("\nM" + m + " : " + nbAstreintes); }
-		 * System.out.println("\n\nNb d'astreintes en weekend"); for (int m = 0;
-		 * m < medecins; m++) { int nbAstreintes = 0; for (int i = 0; i < joursW
-		 * * semaines; i++) { nbAstreintes += med2[m][i].getValue(); }
-		 * System.out.print("\nM" + m + " : " + nbAstreintes); } }
-		 */
 	}
 }

@@ -19,7 +19,6 @@ public class Faisabilite {
 	}
 
 	public boolean faisable() {
-		// TODO Auto-generated method stub
 		boolean un = this.testConge() ;
 		boolean deux = this.testPrefSemaine() ;
 		boolean trois = this.testPrefMedecin() ;
@@ -28,35 +27,34 @@ public class Faisabilite {
 	}
 
 	private boolean testPrefConge() {
-		// TODO Auto-generated method stub
 		boolean ok = true ;
-		ArrayList<Integer>[] dispo = new ArrayList[this.tabConge[0].length];
-		for(int i = 0 ; i<dispo.length ; i++){
-			dispo[i] = new ArrayList<Integer>();
+		ArrayList<ArrayList<Integer>> dispo = new ArrayList<ArrayList<Integer>>(); //)[this.tabConge[0].length];
+		for (int i = 0; i<this.tabConge[0].length; i++){
+			dispo.add(new ArrayList<Integer>());
 		}
 		// Insertion préférences
-		for( int j = 0 ; j<dispo.length ; j++){
-				for(int m = 0 ; m< this.tabPref.length ; m++){
-					if(this.tabPref[m][j%7] == 1 ){
-						dispo[j].add(m);
-					}
+		for( int j = 0 ; j<this.tabConge[0].length ; j++){
+			for(int m = 0 ; m< this.tabPref.length ; m++){
+				if(this.tabPref[m][j%7] == 1 ){
+					dispo.get(j).add(m);
 				}
+			}
 		}
 		// Soustraction conge
 		for(int j = 0 ; j<this.tabConge[0].length ; j++ ){
 			ArrayList<Integer> ms = new ArrayList<Integer>();
-			for( int r = 0 ; r<dispo[j].size() ; r++){
-				ms.add(dispo[j].get(r));
+			for( int r = 0 ; r<dispo.get(j).size() ; r++){
+				ms.add(dispo.get(j).get(r));
 			}
-			for(int i = 0 ; i<dispo[j].size() ; i++ ){
-				if(this.tabConge[dispo[j].get(i)][j] == 1){
-					dispo[j].remove(i);
+			for(int i = 0 ; i<dispo.get(j).size() ; i++ ){
+				if(this.tabConge[dispo.get(j).get(i)][j] == 1){
+					dispo.get(j).remove(i);
 					i--;
 				}
 				if(ok){
-					ok = !dispo[j].isEmpty() ;
+					ok = !dispo.get(j).isEmpty() ;
 				}
-				if(dispo[j].isEmpty()){				
+				if(dispo.get(j).isEmpty()){				
 					System.out.println(ms.get(0));
 					this.Erreur = this.Erreur +"Les médecins " + this.infos.getDoctors().get(ms.get(0));
 					for(int k = 1 ; k<ms.size() ; k++){
@@ -89,7 +87,6 @@ public class Faisabilite {
 	}
 
 	private boolean testPrefSemaine() {
-		// TODO Auto-generated method stub
 		boolean ok = true ;
 		int j = 0 ;
 		while( j< tabPref[0].length && ok ){
@@ -110,9 +107,7 @@ public class Faisabilite {
 		return ok ;
 	}
 
-	private boolean testConge() {
-		// TODO Auto-generated method stub
-		
+	private boolean testConge() {		
 		// test journalier
 		int j = 0 ;
 		boolean ok = true ;
@@ -133,25 +128,6 @@ public class Faisabilite {
 	}
 
 	public String provenence() {
-		// TODO Auto-generated method stub
 		return this.Erreur;
 	}
-	public static void main(String[] args) {
-		int[][] tabpref = new int[][]{{0,0,0,1,1,1,0},
-				{1,0,0,1,0,0,1},
-				{0,1,1,0,0,1,0},
-				{0,1,1,0,0,0,1},
-				{1,0,0,0,1,0,1},
-				{0,1,0,0,1,0,0},
-				{0,0,0,1,1,1,0}};
-		int[][] tabconge  = new int[][]{{1,1,1,1,1,1,1},
-			{1,0,0,0,0,0,0},
-			{0,0,1,0,0,0,0},
-			{0,0,1,0,0,0,0},
-			{1,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0}};		
-		
-	}
-
 }
