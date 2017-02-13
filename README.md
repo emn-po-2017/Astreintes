@@ -1,10 +1,10 @@
 # Astreintes médicales
 
-Ce projet est un **plannificateur d'astreintes médicales** répondant à un cahier des charges spécifique. Il résout un problème d'optimisation par contraintes (minimisation d'ne fonction objectif) à l'aide du solveur Choco.
+Ce projet est un **plannificateur d'astreintes médicales** répondant à un cahier des charges spécifique. Il résout un problème d'optimisation par contraintes (minimisation d'une fonction objectif) à l'aide du solveur Choco.
 
 ##Motivation
 
-Ce projet entre dans le cadre de l'enseignement de 3e année de Formation Ingénieur en option Génie Informatique Pour l'Aide à la Décision, à l'Institu Mines-Télécom Atlantique (anciennement Ecoles des Mines de Nantes). Il s'agit d'un Projet d'Option, réalisé par un groupe d'étudiants (quatre au total). Il est réalisé durant 1er semestre. Le sujet a été choisi par les étudiants à partir d'une liste prédéfinie par le responsable d'option Xavier Lorca. Ce projet constitue une Unité de Valeur pour le semetre 1 de l'année 3 et fait donc l'objet d'une évalutation.
+Ce projet entre dans le cadre de l'enseignement de 3e année de Formation Ingénieur en option Génie Informatique Pour l'Aide à la Décision, à l'Institu Mines-Télécom Atlantique (anciennement Ecoles des Mines de Nantes). Il s'agit d'un Projet d'Option, réalisé par un groupe d'étudiants (quatre au total). Il est réalisé durant le 1er semestre. Le sujet a été choisi par les étudiants à partir d'une liste prédéfinie par le responsable d'option Xavier Lorca. Ce projet constitue une Unité de Valeur pour le semetre 1 de l'année 3 et fait donc l'objet d'une évalutation.
 
 ##Installation
 
