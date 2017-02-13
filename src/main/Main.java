@@ -45,8 +45,10 @@ public class Main {
 			 * 3.1 Solver
 			 */
 			if (f.faisable()) {
+				
 				Solveur solveur = new Solveur(infos, conges, prefs);
 				int[] resultats = solveur.resoudre();
+
 				int cpt = 0;
 				for(int i=0; i<resultats.length; i++ ) {
 					if(resultats[i] == 0){
@@ -58,8 +60,9 @@ public class Main {
 					JOptionPane.showMessageDialog(
 							d, 
 							"Pas de solution trouvée.\n"
-							+ "Piste de résolution :\n"
-							+ "Pour un médecin : Evitez les couples de préférences 'Lundi-Mardi' ou 'Jeudi-Vendredi'.", 
+							+ "Attention :\n"
+							+ "     - Evitez les couples de préférences 'Lundi-Mardi' ou 'Jeudi-Vendredi'.\n"
+							+ "     - Faites attention aux congés.", 
 							"Erreur",
 							JOptionPane.ERROR_MESSAGE);
 				}
@@ -68,6 +71,7 @@ public class Main {
 				 * 4. Ecriture du fichier sortant
 				 */
 				else {
+					
 					String output = "Planning.xls";
 					WriteOutput excel_file = new WriteOutput(output, resultats, infos);
 	
