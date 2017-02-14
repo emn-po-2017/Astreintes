@@ -24,7 +24,6 @@ public class Read_Preferences {
 				
 			}
 		}
-		
 		for (int l=2; l < sheet.getRows(); l++) {
 			String doc = sheet.getCell(0, l).getContents();
 			if (doc != infos.getDoctors().get(l-2)) {

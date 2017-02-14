@@ -23,7 +23,7 @@ public class Read_Excel {
   
     public void read() throws IOException  {
         File inputWorkbook = new File(path);
-        if(!inputWorkbook.exists()){
+        if(!inputWorkbook.getAbsoluteFile().exists()){
         	JOptionPane d = new JOptionPane();
 			JOptionPane.showMessageDialog(
 					d, 
