@@ -28,14 +28,8 @@ public class Solveur {
 		solver.limitTime("10s");
 		int[] resultats = new int[variables.getMed()[0].length];
 		while (solver.solve()) {
-			System.out.println(objectif.getObj4());
-			System.out.println(objectif.getSommeCarree());
-			System.out.println(objectif.getSommeNonVoulues());
-		System.out.println("1: " + objectif.getNbAstreintesParMedecin()[0].getValue() + "\n" + "2: "
-				+ objectif.getNbAstreintesParMedecin()[1].getValue() + "\n" + "3: " + objectif.getNbAstreintesParMedecin()[2].getValue() + "\n"
-				+ "4: " + objectif.getNbAstreintesParMedecin()[3].getValue() + "\n" + "5: " + objectif.getNbAstreintesParMedecin()[4].getValue()
-				+ "\n" + "6: " + objectif.getNbAstreintesParMedecin()[5].getValue() + "\n" + "7: "
-				+ objectif.getNbAstreintesParMedecin()[6].getValue() + "\n");
+	        System.out.println();
+			System.out.println(objectif.getObj2());
 		
 		//Ecriture du resultat
  		for (int i=0; i<variables.getMed().length; i++) {
@@ -59,7 +53,7 @@ public class Solveur {
 		}
         System.out.println();
 		int compteur2 = 0;
-		for (int i=0; i<7; i++) {
+		for (int i=0; i<variables.getMed().length; i++) {
 			for (int j=0; j<resultats.length; j++) {
 				if (resultats[j] == i) {
 					compteur2++;
@@ -69,6 +63,7 @@ public class Solveur {
 			compteur2 = 0;
 			}
 		}
+        System.out.println();
 		return resultats;
 	}
 }

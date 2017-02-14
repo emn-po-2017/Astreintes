@@ -197,12 +197,15 @@ public class Calendrier {
 		  Colour colour;
 		  switch (i) {
 		  case 0: colour=Colour.BLUE2; break;
-		  case 1: colour=Colour.LIME; break;
+		  case 1: colour=Colour.GOLD; break;
 		  case 2: colour=Colour.GREEN; break;
 		  case 3: colour=Colour.LAVENDER; break;
 		  case 4: colour=Colour.PALE_BLUE; break;
 		  case 5: colour=Colour.RED; break;
-		  case 6: colour=Colour.GOLD; break;
+		  case 6: colour=Colour.LIME; break;
+		  case 7: colour=Colour.CORAL; break;
+		  case 8: colour=Colour.DARK_BLUE2; break;
+		  case 9: colour=Colour.TAN; break;
 		  default: colour=Colour.VIOLET2; break;
 		  }
 		  return colour;
