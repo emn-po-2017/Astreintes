@@ -64,9 +64,6 @@ public class Objectif {
 		for (int m = 0; m < param.medecins; m++) {
 			model.sum(medNonVouluBis[m], "=", nbAstreintesNonVoulues[m]).post();
 		}
-		//for (int m = 0; m < param.medecins; m++) {
-		//	model.sum(v.getMedNonVoulu()[m], "=", nbAstreintesNonVoulues[m]).post();
-		//}
 		model.sum(nbAstreintesNonVoulues, "=", sommeNonVoulues).post();
 		
 		//Calcul du nombre d'astreintes par medecin Asi
@@ -139,11 +136,6 @@ public class Objectif {
 			model.setObjective(Model.MINIMIZE, obj4);
 			
 		}
-		
-		// ParetoOptimizer po = new ParetoOptimizer(Model.MINIMIZE,
-		// nbAstreintesParMedecin);
-		// Solver solver = model.getSolver();
-		// solver.plugMonitor(po);
 
 	}
 	public IntVar getSommeNonVoulues() {

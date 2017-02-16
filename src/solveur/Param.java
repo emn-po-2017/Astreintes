@@ -26,42 +26,10 @@ public class Param {
 	
 		this.medecins = infos.getDoctors().size();
 		this.semaines = infos.getNbSemaines();
-		//this.nbAstreinteMin = (semaines*joursT/medecins)-3;
 		this.nbAstreinteMin = (semaines*joursT/medecins)-2;
-		//this.nbAstreinteSemaineMax = (semaines*joursS/medecins)+2;
-		//this.nbAstreinteWeekendMax = (semaines*joursW/medecins)+2;
 		this.nbAstreinteSemaineMax = (semaines*joursS/medecins)+2;
 		this.nbAstreinteWeekendMax = (semaines*joursW/medecins)+2;
 		this.tabConge = conges.getConges();
-		//this.tabPref = prefs.getPrefs();
 		this.tabPref = prefs.getPrefs() ;
-		
-		
-		
-		
-//		for (int i = 0; i < medecins; i++) {
-//			for (int j = 0; j < semaines * joursT; j++) {
-//				tabConge[i][j] = 0;
-//			}
-//		}
-//		// vacances d'hiver, 2 semaines 2 médecins
-//		for (int j = 35; j < 49; j++) {
-//			tabConge[0][j] = 1;
-//			tabConge[1][j] = 1;
-//		}
-//		// vacances de paques,
-//		for (int j = 63; j < 70; j++) {
-//			tabConge[2][j] = 1;
-//			tabConge[3][j] = 1;
-//		}
-//		for (int j = 70; j < 77; j++) {
-//			tabConge[4][j] = 1;
-//			tabConge[5][j] = 1;
-//			tabConge[6][j] = 1;
-//		}
-//		for (int j = 77; j < 84; j++) {
-//			tabConge[0][j] = 1;
-//			tabConge[1][j] = 1;
-//		}
 	}
 }

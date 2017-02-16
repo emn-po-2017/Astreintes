@@ -44,12 +44,7 @@ public class Contraintes {
 				model.sum(v.getParSemaine5()[s][m], "<=", 2).post();
 			}
 		}
-		// Pas 2 d'affilée
-//		for (int m = 0; m < param.medecins; m++) {
-//			for (int j = 0; j < param.semaines * Param.joursT - 1; j++) {
-//				model.arithm(v.getMed()[m][j], "+", v.getMed()[m][j + 1], "<", 2).post();
-//			}
-//		}
+
 		// Pas 2 le week end
 		for(int s = 0 ; s<param.semaines; s++){
 			for( int m = 0 ; m < param.medecins ; m++ ){
